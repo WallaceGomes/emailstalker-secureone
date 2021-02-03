@@ -1,8 +1,8 @@
 {
-  "name": "boilerplate-nodejs",
+  "name": "emailstalker-secureone",
   "version": "1.0.0",
   "main": "server.js",
-  "repository": "https://github.com/WallaceGomes/boilerplate-nodejs.git",
+  "repository": "https://github.com/WallaceGomes/emailstalker-secureone.git",
   "author": "WallaceGomes <wallacecardosogomes@gmail.com>",
   "license": "MIT",
   "private": false,
