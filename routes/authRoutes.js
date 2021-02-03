@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const router = Router();
-const authController = require('../controllers/AuthController');
+const authController = require('../controllers/authController');
 
 router.post('/login', authController.login);
 router.post('/forgotpass', authController.forgotPassword);
