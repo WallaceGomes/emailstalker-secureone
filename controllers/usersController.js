@@ -1,10 +1,19 @@
 const bcrypt = require('bcryptjs');
+const { STRING } = require('sequelize');
 
 const HttpError = require('../models/http-error');
 const User = require('../models/User');
 
+function getRandomInt(min, max) {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
 exports.create = async (req, res, next) => {
-	const { name, email, password } = req.body;
+	const { name, email } = req.body;
+
+	const password = String(getRandomInt(100000, 999999));
 
 	try {
 		const checkUser = await User.findOne({ where: { email: email } });

@@ -1,2 +1,3 @@
-# boilerplate-nodejs
-A simple boilerplate with the basics of NodeJs to initiate any MVC project
+# Emailstalker for Secureone
+
+Simple project to read and send emails to clients
