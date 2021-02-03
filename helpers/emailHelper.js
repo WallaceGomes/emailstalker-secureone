@@ -87,13 +87,13 @@ const emailStalker = async () => {
 	};
 
 	await imaps.connect(config).then(function (connection) {
-		return connection.openBox('INBOX').then(function () {
+		connection.openBox('INBOX').then(function () {
 			let searchCriteria = ['UNSEEN'];
 			let fetchOptions = {
 				bodies: ['HEADER', 'TEXT', ''],
 				markSeen: true,
 			};
-			return connection
+			connection
 				.search(searchCriteria, fetchOptions)
 				.then(function (messages) {
 					messages.forEach(function (item) {
@@ -134,8 +134,12 @@ const emailStalker = async () => {
 						});
 					});
 				})
-				.then(connection.end);
+				.catch((err) => {
+					console.log(err);
+				});
 		});
+
+		connection.end();
 	});
 
 	// PS Appliance: Dimen
