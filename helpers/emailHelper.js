@@ -133,7 +133,8 @@ const emailStalker = async () => {
 							console.log('Stalker Finished');
 						});
 					});
-				});
+				})
+				.then(connection.end);
 		});
 	});
 
