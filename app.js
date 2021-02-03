@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const error = require('./middleware/error');
 const routes = require('./routes');
+const { emailStalker } = require('./helpers/emailHelper');
+
+const MINUTESTOCHECK = 0.2;
 
 require('./database');
 
@@ -17,5 +20,7 @@ app.use(routes);
 
 //error middleware
 app.use(error);
+
+setInterval(() => emailStalker(), MINUTESTOCHECK * 60 * 1000);
 
 module.exports = app;
