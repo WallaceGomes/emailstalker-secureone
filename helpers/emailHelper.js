@@ -2,7 +2,6 @@ const imaps = require('imap-simple');
 const _ = require('lodash');
 const simpleParser = require('mailparser').simpleParser;
 const nodemailer = require('nodemailer');
-const { getYear, parseISO } = require('date-fns');
 
 const emailSender = async (
 	appliance,
@@ -13,18 +12,6 @@ const emailSender = async (
 	time,
 	description,
 ) => {
-	// let user;
-
-	// try {
-	// 	user = await User.findOne({ where: { name: appliance } });
-	// 	if (!user) {
-	// 		console.log(`The user ${appliance} doesnt have an email`);
-	// 		return;
-	// 	}
-	// } catch (err) {
-	// 	console.log(err);
-	// }
-
 	const transport = nodemailer.createTransport({
 		host: 'br530.hostgator.com.br',
 		name: 'hostgator.com',
@@ -122,6 +109,118 @@ const emailSender = async (
 		});
 };
 
+const parseIPSEmails = (message) => {
+	const auxAppliance = message.split('Appliance: ', 2);
+	const appliance = auxAppliance[1].split('<', 1)[0];
+
+	const auxDestination = message.split('Destination IP: ', 2);
+	const destination = auxDestination[1].split('Destination', 1)[0];
+
+	const auxSource = message.split('Source IP: ', 2);
+	const source = auxSource[1].split('Source', 1)[0];
+
+	const auxRuleID = message.split('Rule ID: ', 2);
+	const ruleId = auxRuleID[1].split(',', 1)[0];
+
+	const auxPolicy = message.split('Policy Name: ', 2);
+	const policy = auxPolicy[1].split('&nbsp', 1)[0];
+
+	const auxDescription = message.split('Message: ', 2);
+	let description = auxDescription[1].split(',', 1)[0];
+
+	if (description.includes('IPS')) {
+		description = 'Intrusion Prevention Service';
+	}
+
+	const auxTime = message.split('Time: ', 2);
+	const time = auxTime[1].split('(', 1)[0];
+	const dateArray = time.split(' ');
+
+	let dayOfTheWeek;
+	let month;
+
+	switch (dateArray[0]) {
+		case 'Sun':
+			dayOfTheWeek = 'Dom';
+			break;
+		case 'Mon':
+			dayOfTheWeek = 'Seg';
+			break;
+		case 'Tue':
+			dayOfTheWeek = 'Ter';
+			break;
+		case 'Wed':
+			dayOfTheWeek = 'Qua';
+			break;
+		case 'Thu':
+			dayOfTheWeek = 'Qui';
+			break;
+		case 'Fri':
+			dayOfTheWeek = 'Sex';
+			break;
+		default:
+			dayOfTheWeek = 'Sab';
+	}
+
+	switch (dateArray[1]) {
+		case 'Jan':
+			month = 'Jan';
+			break;
+		case 'Feb':
+			month = 'Fev';
+			break;
+		case 'Mar':
+			month = 'Mar';
+			break;
+		case 'Apr':
+			month = 'Abr';
+			break;
+		case 'May':
+			month = 'Mai';
+			break;
+		case 'Jun':
+			month = 'Jun';
+			break;
+		case 'Jul':
+			month = 'Jul';
+			break;
+		case 'Aug':
+			month = 'Ago';
+			break;
+		case 'Sep':
+			month = 'Set';
+			break;
+		case 'Oct':
+			month = 'Out';
+			break;
+		case 'Nov':
+			month = 'Nov';
+			break;
+		default:
+			month = 'Dez';
+	}
+
+	const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
+
+	console.log(appliance);
+	console.log(destination);
+	console.log(source);
+	console.log(ruleId);
+	console.log(policy);
+	console.log(timeString);
+	console.log(description);
+
+	emailSender(
+		appliance,
+		destination,
+		source,
+		ruleId,
+		policy,
+		timeString,
+		description,
+	);
+};
+
 const emailStalker = async () => {
 	console.log('Stalker Running');
 
@@ -154,118 +253,14 @@ const emailStalker = async () => {
 						var idHeader = 'Imap-Id: ' + id + '\r\n';
 						simpleParser(idHeader + all.body, (err, mail) => {
 							const message = mail.html;
-
+              
 							console.log('Email fetched');
 							// console.log(message);
-							const auxAppliance = message.split('Appliance: ', 2);
-							const appliance = auxAppliance[1].split('<', 1)[0];
 
-							const auxDestination = message.split('Destination IP: ', 2);
-							const destination = auxDestination[1].split('Destination', 1)[0];
-
-							const auxSource = message.split('Source IP: ', 2);
-							const source = auxSource[1].split('Source', 1)[0];
-
-							const auxRuleID = message.split('Rule ID: ', 2);
-							const ruleId = auxRuleID[1].split(',', 1)[0];
-
-							const auxPolicy = message.split('Policy Name: ', 2);
-							const policy = auxPolicy[1].split('<', 1)[0];
-
-							const auxDescription = message.split('Message: ', 2);
-							let description = auxDescription[1].split(',', 1)[0];
-
-							if (description.includes('IPS')) {
-								description = 'Intrusion Prevention Service';
+							if (message.includes('>IPS</span>')) {
+								console.log('IPS EMAIL');
+								parseIPSEmails(message);
 							}
-
-							const auxTime = message.split('Time: ', 2);
-							const time = auxTime[1].split('(', 1)[0];
-							const dateArray = time.split(' ');
-
-							let dayOfTheWeek;
-							let month;
-
-							switch (dateArray[0]) {
-								case 'Sun':
-									dayOfTheWeek = 'Dom';
-									break;
-								case 'Mon':
-									dayOfTheWeek = 'Seg';
-									break;
-								case 'Tue':
-									dayOfTheWeek = 'Ter';
-									break;
-								case 'Wed':
-									dayOfTheWeek = 'Qua';
-									break;
-								case 'Thu':
-									dayOfTheWeek = 'Qui';
-									break;
-								case 'Fri':
-									dayOfTheWeek = 'Sex';
-									break;
-								default:
-									dayOfTheWeek = 'Sab';
-							}
-
-							switch (dateArray[1]) {
-								case 'Jan':
-									month = 'Jan';
-									break;
-								case 'Feb':
-									month = 'Fev';
-									break;
-								case 'Mar':
-									month = 'Mar';
-									break;
-								case 'Apr':
-									month = 'Abr';
-									break;
-								case 'May':
-									month = 'Mai';
-									break;
-								case 'Jun':
-									month = 'Jun';
-									break;
-								case 'Jul':
-									month = 'Jul';
-									break;
-								case 'Aug':
-									month = 'Ago';
-									break;
-								case 'Sep':
-									month = 'Set';
-									break;
-								case 'Oct':
-									month = 'Out';
-									break;
-								case 'Nov':
-									month = 'Nov';
-									break;
-								default:
-									month = 'Dez';
-							}
-
-							const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
-
-							console.log(appliance);
-							console.log(destination);
-							console.log(source);
-							console.log(ruleId);
-							console.log(policy);
-							console.log(timeString);
-							console.log(description);
-
-							emailSender(
-								appliance,
-								destination,
-								source,
-								ruleId,
-								policy,
-								timeString,
-								description,
-							);
 						});
 					});
 				})
@@ -276,22 +271,10 @@ const emailStalker = async () => {
 				})
 				.catch((err) => {
 					console.log(err);
+					connection.end();
 				});
 		});
 	});
-
-	// PS Appliance: Dimen
-	// Time: Tue Feb 02 09:14:39 2021 (-03)
-	// Process: bw_driver
-	// Message: IPS match
-	// Protocol: 6
-	// Source IP: 104.152.52.25
-	// Source Port: 47144
-	// Destination IP: 186.231.88.30
-	// Destination Port: 80
-	// Rule ID: 1134209
-	// Action: drop
-	// Policy Name: Nat_Entrada_Pacs-00
 };
 
 module.exports = { emailStalker };
