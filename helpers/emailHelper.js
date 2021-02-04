@@ -144,6 +144,7 @@ const emailStalker = async () => {
 				bodies: ['HEADER', 'TEXT', ''],
 				markSeen: true,
 			};
+
 			return connection
 				.search(searchCriteria, fetchOptions)
 				.then(function (messages) {
@@ -265,17 +266,18 @@ const emailStalker = async () => {
 								timeString,
 								description,
 							);
-
-							console.log('Stalker Finished');
 						});
 					});
+				})
+				.then(() => {
+					connection.end();
+					console.log('Stalker Finished');
+					console.log('Connection closed');
 				})
 				.catch((err) => {
 					console.log(err);
 				});
 		});
-
-		connection.end();
 	});
 
 	// PS Appliance: Dimen
