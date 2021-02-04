@@ -6,7 +6,7 @@ const error = require('./middleware/error');
 const routes = require('./routes');
 const { emailStalker } = require('./helpers/emailHelper');
 
-const MINUTESTOCHECK = 5;
+const MINUTESTOCHECK = 0.2;
 
 require('./database');
 
