@@ -238,7 +238,7 @@ const emailStalker = async () => {
 
 	await imaps.connect(config).then(function (connection) {
 		return connection.openBox('INBOX').then(function () {
-			let searchCriteria = ['UNSEEN'];
+			let searchCriteria = ['UNSEEN', ['SUBJECT', 'IPS']];
 			let fetchOptions = {
 				bodies: ['HEADER', 'TEXT', ''],
 				markSeen: true,
@@ -253,7 +253,7 @@ const emailStalker = async () => {
 						var idHeader = 'Imap-Id: ' + id + '\r\n';
 						simpleParser(idHeader + all.body, (err, mail) => {
 							const message = mail.html;
-
+              
 							console.log('Email fetched');
 							// console.log(message);
 

@@ -1,0 +1,62 @@
+<body
+	style="
+		max-width: 720px;
+		margin-top: 20px;
+		margin-left: 10px;
+		font-family: 'Calibri', sans-serif;
+	"
+>
+	<div style="display: flex">
+		<img
+			style="width: 160px"
+			src="https://secureone.com.br/wp-content/uploads/2019/05/secureone-preto.png"
+		/>
+		<p
+			style="
+				color: red;
+				text-align: center;
+				font-weight: bold;
+				font-size: 30px;
+				margin-left: 50px;
+			"
+		>
+			Alerta de segurança!
+		</p>
+	</div>
+	<br /><br />
+	<p>Tentativa de ataque bloqueada.</p>
+	<section style="line-height: 5px">
+		<p style="font-weight: 600">
+			Categoria: <span style="font-weight: 400">${description}</span>
+		</p>
+		<p style="font-weight: 600">
+			Local: <span style="font-weight: 400; color: orange">${appliance}</span>
+		</p>
+		<p style="font-weight: 600">
+			Origen: <span style="font-weight: 400">${source}</span>
+		</p>
+		<p style="font-weight: 600">
+			Destino: <span style="font-weight: 400">${destination}</span>
+		</p>
+		<p style="font-weight: 600">
+			ID da ameaça:
+			<span style="font-weight: 400; color: orange">${ruleId}</span>
+		</p>
+		<p style="font-weight: 600">
+			Hora: <span style="font-weight: 400">${time}</span>
+		</p>
+		<p style="font-weight: 600">
+			Política: <span style="font-weight: 400">${policy}</span>
+		</p>
+	</section>
+	<br />
+	<section style="line-height: 5px">
+		<p>Para mais informações desta ameaça:</p>
+		<p>
+			<a
+				href="https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}"
+				>https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}</a
+			>
+		</p>
+	</section>
+</body>
