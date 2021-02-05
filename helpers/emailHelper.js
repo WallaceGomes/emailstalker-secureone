@@ -39,8 +39,8 @@ const emailSender = async (
 		>
 			<div style="display: flex">
 				<img
-					style="width: 170px"
-					src="https://secureone.com.br/wp-content/uploads/2019/05/secureone-preto.png"
+					style="width: 180px"
+					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
 				/>
 				<p
 					style="
@@ -111,7 +111,7 @@ const emailSender = async (
 
 const parseIPSEmails = (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
-	const appliance = auxAppliance[1].split('<', 1)[0];
+	const appliance = auxAppliance[1].split('\n', 1)[0];
 
 	const auxDestination = message.split('Destination IP: ', 2);
 	const destination = auxDestination[1].split('Destination', 1)[0];
@@ -123,7 +123,7 @@ const parseIPSEmails = (message) => {
 	const ruleId = auxRuleID[1].split(',', 1)[0];
 
 	const auxPolicy = message.split('Policy Name: ', 2);
-	const policy = auxPolicy[1].split('&nbsp', 1)[0];
+	const policy = auxPolicy[1].split('\n', 1)[0];
 
 	const auxDescription = message.split('Message: ', 2);
 	let description = auxDescription[1].split(',', 1)[0];
@@ -202,13 +202,13 @@ const parseIPSEmails = (message) => {
 
 	const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
 
-	console.log(appliance);
-	console.log(destination);
-	console.log(source);
-	console.log(ruleId);
-	console.log(policy);
-	console.log(timeString);
-	console.log(description);
+	console.log(`Appliance: ${appliance}`);
+	// console.log(destination);
+	// console.log(source);
+	// console.log(ruleId);
+	// console.log(policy);
+	// console.log(timeString);
+	// console.log(description);
 
 	emailSender(
 		appliance,
@@ -252,12 +252,12 @@ const emailStalker = async () => {
 						var id = item.attributes.uid;
 						var idHeader = 'Imap-Id: ' + id + '\r\n';
 						simpleParser(idHeader + all.body, (err, mail) => {
-							const message = mail.html;
+							const message = mail.text;
 
 							console.log('Email fetched');
 							// console.log(message);
 
-							if (message.includes('>IPS</span>')) {
+							if (message.includes('IPS')) {
 								console.log('IPS EMAIL');
 								parseIPSEmails(message);
 							}
