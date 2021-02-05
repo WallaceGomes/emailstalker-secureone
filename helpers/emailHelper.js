@@ -38,16 +38,14 @@ const emailSender = async (
 			"
 			>
 			<p
-				style="
-					color: red;
-					text-align: center;
-					font-weight: bold;
-					font-size: 30px;
-				"
+				style="color: red;
+				font-weight: bold;
+				font-size: 30px";
+				line-height: 2px;"
 			>
 				Alerta de segurança!
 			</p>
-			<br /><br />
+			<br />
 			<p>Tentativa de ataque bloqueada.</p>
 			<section style="line-height: 2px">
 				<p style="font-weight: 600">
@@ -277,6 +275,7 @@ const emailStalker = async () => {
 							connection.end();
 							console.log('Stalker Finished');
 							console.log('Connection closed');
+							console.log(new Date().toISOString());
 						})
 						.catch((err) => {
 							console.log(err);
