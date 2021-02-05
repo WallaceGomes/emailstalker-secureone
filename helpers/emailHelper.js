@@ -3,7 +3,7 @@ const _ = require('lodash');
 const simpleParser = require('mailparser').simpleParser;
 const nodemailer = require('nodemailer');
 
-const emailSender = async (
+const ipsEmailSender = async (
 	appliance,
 	destination,
 	source,
@@ -55,7 +55,7 @@ const emailSender = async (
 					Local: <span style="font-weight: 400; color: orange">${appliance}</span>
 				</p>
 				<p style="font-weight: 600">
-					Origen: <span style="font-weight: 400">${source}</span>
+					Origem: <span style="font-weight: 400">${source}</span>
 				</p>
 				<p style="font-weight: 600">
 					Destino: <span style="font-weight: 400">${destination}</span>
@@ -213,7 +213,7 @@ const parseIPSEmails = (message) => {
 	// console.log(timeString);
 	// console.log(description);
 
-	emailSender(
+	ipsEmailSender(
 		appliance,
 		destination,
 		source,
