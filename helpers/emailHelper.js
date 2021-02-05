@@ -36,27 +36,20 @@ const emailSender = async (
 				margin-left: 10px;
 				font-family: 'Calibri', sans-serif;
 			"
-		>
-			<div style="display: flex">
-				<img
-					style="width: 180px"
-					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
-				/>
-				<p
-					style="
-						color: red;
-						text-align: center;
-						font-weight: bold;
-						font-size: 30px;
-						margin-left: 50px;
-					"
-				>
-					Alerta de segurança!
-				</p>
-			</div>
+			>
+			<p
+				style="
+					color: red;
+					text-align: center;
+					font-weight: bold;
+					font-size: 30px;
+				"
+			>
+				Alerta de segurança!
+			</p>
 			<br /><br />
 			<p>Tentativa de ataque bloqueada.</p>
-			<section style="line-height: 5px">
+			<section style="line-height: 2px">
 				<p style="font-weight: 600">
 					Categoria: <span style="font-weight: 400;">${description}</span>
 				</p>
@@ -87,6 +80,18 @@ const emailSender = async (
 					<a
 						href="https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}"
 						>https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}</a
+					>
+				</p>
+			</section>
+			<section>
+				<img
+					style="width: 180px"
+					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
+				/>
+				<p>
+					<a
+						href="https://secureone.com.br/"
+						>www.secureone.com.br</a
 					>
 				</p>
 			</section>
@@ -236,45 +241,55 @@ const emailStalker = async () => {
 		},
 	};
 
-	await imaps.connect(config).then(function (connection) {
-		return connection.openBox('INBOX').then(function () {
-			let searchCriteria = ['UNSEEN'];
-			let fetchOptions = {
-				bodies: ['HEADER', 'TEXT', ''],
-				markSeen: true,
-			};
-
+	await imaps
+		.connect(config)
+		.then(function (connection) {
 			return connection
-				.search(searchCriteria, fetchOptions)
-				.then(function (messages) {
-					messages.forEach(function (item) {
-						let all = _.find(item.parts, { which: '' });
-						var id = item.attributes.uid;
-						var idHeader = 'Imap-Id: ' + id + '\r\n';
-						simpleParser(idHeader + all.body, (err, mail) => {
-							const message = mail.text;
+				.openBox('INBOX')
+				.then(function () {
+					let searchCriteria = ['UNSEEN'];
+					let fetchOptions = {
+						bodies: ['HEADER', 'TEXT', ''],
+						markSeen: true,
+					};
 
-							console.log('Email fetched');
-							// console.log(message);
+					return connection
+						.search(searchCriteria, fetchOptions)
+						.then(function (messages) {
+							messages.forEach(function (item) {
+								let all = _.find(item.parts, { which: '' });
+								var id = item.attributes.uid;
+								var idHeader = 'Imap-Id: ' + id + '\r\n';
+								simpleParser(idHeader + all.body, (err, mail) => {
+									const message = mail.text;
 
-							if (message.includes('IPS')) {
-								console.log('IPS EMAIL');
-								parseIPSEmails(message);
-							}
+									console.log('Email fetched');
+									// console.log(message);
+
+									if (message.includes('IPS')) {
+										console.log('IPS EMAIL');
+										parseIPSEmails(message);
+									}
+								});
+							});
+						})
+						.then(() => {
+							connection.end();
+							console.log('Stalker Finished');
+							console.log('Connection closed');
+						})
+						.catch((err) => {
+							console.log(err);
+							connection.end();
 						});
-					});
-				})
-				.then(() => {
-					connection.end();
-					console.log('Stalker Finished');
-					console.log('Connection closed');
 				})
 				.catch((err) => {
 					console.log(err);
-					connection.end();
 				});
+		})
+		.catch((err) => {
+			console.log(err);
 		});
-	});
 };
 
 module.exports = { emailStalker };
