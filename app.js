@@ -8,8 +8,6 @@ const { emailStalker } = require('./helpers/emailHelper');
 
 const MINUTESTOCHECK = 1;
 
-require('./database');
-
 const app = express();
 
 app.use(bodyParser.json({ limit: '25MB' }));

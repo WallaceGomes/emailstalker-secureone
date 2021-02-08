@@ -27,7 +27,7 @@ const ipsEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			to: `dev@secureone.com.br`,
+			to: `notificacao@secureone.com.br`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -91,6 +91,119 @@ const ipsEmailSender = async (
 						href="https://secureone.com.br/"
 						>www.secureone.com.br</a
 					>
+				</p>
+			</section>
+		</body>
+		`,
+		})
+		.then(() => {
+			console.log(`Email delivered to client`);
+		})
+		.catch((err) => {
+			console.log('Errors occurred, failed to deliver the email');
+
+			if (err.response && err.response.body && err.response.body.errors) {
+				err.response.body.errors.forEach((error) =>
+					console.log('%s: %s', error.field, error.message),
+				);
+			} else {
+				console.log(err);
+			}
+		});
+};
+
+const aVEmailSender = async (
+	appliance,
+	destination,
+	source,
+	policy,
+	timeString,
+	description,
+	reason,
+	authUser,
+	virus,
+	host,
+	path,
+) => {
+	const transport = nodemailer.createTransport({
+		host: 'br530.hostgator.com.br',
+		name: 'hostgator.com',
+		port: 587,
+		secure: false,
+		auth: {
+			user: process.env.MAILER_EMAIL,
+			pass: process.env.MAILER_PASS,
+		},
+	});
+	//
+
+	transport
+		.sendMail({
+			from: process.env.MAILER_EMAIL,
+			to: `notificacao@secureone.com.br`,
+			subject: 'Alerta de segurança',
+			html: `<body
+			style="
+				max-width: 720px;
+				margin-top: 20px;
+				margin-left: 10px;
+				font-family: 'Calibri', sans-serif;
+			"
+		>
+			<p style="color: red; font-weight: bold; font-size: 30px; line-height: 2px">
+				Alerta de segurança!
+			</p>
+			<br />
+			<p>Tentativa de ataque bloqueada.</p>
+			<section style="line-height: 2px">
+				<p style="font-weight: 600">
+					Categoria: <span style="font-weight: 400">${description}</span>
+				</p>
+				<p style="font-weight: 600">
+					Local: <span style="font-weight: 400; color: orange">${appliance}</span>
+				</p>
+				<p style="font-weight: 600">
+					Razão:
+					<span style="font-weight: 400"
+						><span style="color: red">${reason}</span></span
+					>
+				</p>
+				<p style="font-weight: 600">
+					Usuário autenticado:
+					<span style="font-weight: 400"
+						><span style="color: red">${authUser}</span></span
+					>
+				</p>
+				<p style="font-weight: 600">
+					Origen: <span style="font-weight: 400">${source}</span>
+				</p>
+				<p style="font-weight: 600">
+					Destino: <span style="font-weight: 400">${destination}</span>
+				</p>
+				<p style="font-weight: 600">
+					Hora: <span style="font-weight: 400">${timeString}</span>
+				</p>
+				<p style="font-weight: 600">
+					Política: <span style="font-weight: 400">${policy}</span>
+				</p>
+				<br />
+				<section style="line-height: 2px">
+					<p style="font-weight: 600">
+						Informações do Vírus:</span><p></p>
+						<p>Virus: <span style="font-weight: 400; color: red">${virus}</p>
+						<p>Host: <span style="font-weight: 400; color: red">${host}</p>
+						<p>Path: <span style="font-weight: 400; color: red">${path}</p>
+					</p>
+				</section>
+			</section>
+			<br />
+			<section>
+				<img
+					style="width: 180px"
+					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
+				/>
+				<p>
+					<a href="https://secureone.com.br/">www.secureone.com.br</a>
 				</p>
 			</section>
 		</body>
@@ -224,6 +337,121 @@ const parseIPSEmails = (message) => {
 	);
 };
 
+const parseAVEmails = (message) => {
+	const auxAppliance = message.split('Appliance: ', 2);
+	const appliance = auxAppliance[1].split('\n', 1)[0];
+
+	const auxDestination = message.split('Destination IP: ', 2);
+	const destination = auxDestination[1].split('Destination', 1)[0];
+
+	const auxSource = message.split('Source IP: ', 2);
+	const source = auxSource[1].split('Source', 1)[0];
+
+	const auxPolicy = message.split('Policy Name: ', 2);
+	const policy = auxPolicy[1].split('\n', 1)[0];
+
+	const auxAuthUser = message.split('Authenticated User: ', 2);
+	const authUser = auxAuthUser[1].split('\n', 1)[0];
+
+	const auxVirus = message.split('virus: ', 2);
+	const virus = auxVirus[1].split('\n', 1)[0];
+
+	const auxHost = message.split('host: ', 2);
+	const host = auxHost[1].split('\n', 1)[0];
+
+	const auxPath = message.split('path: ', 2);
+	const path = auxPath[1].split('\n', 1)[0];
+
+	const description = 'Gateway Antivírus Policies';
+	const reason = 'Virus encontrato';
+
+	const auxTime = message.split('Time: ', 2);
+	const time = auxTime[1].split('(', 1)[0];
+	const dateArray = time.split(' ');
+
+	let dayOfTheWeek;
+	let month;
+
+	switch (dateArray[0]) {
+		case 'Sun':
+			dayOfTheWeek = 'Dom';
+			break;
+		case 'Mon':
+			dayOfTheWeek = 'Seg';
+			break;
+		case 'Tue':
+			dayOfTheWeek = 'Ter';
+			break;
+		case 'Wed':
+			dayOfTheWeek = 'Qua';
+			break;
+		case 'Thu':
+			dayOfTheWeek = 'Qui';
+			break;
+		case 'Fri':
+			dayOfTheWeek = 'Sex';
+			break;
+		default:
+			dayOfTheWeek = 'Sab';
+	}
+
+	switch (dateArray[1]) {
+		case 'Jan':
+			month = 'Jan';
+			break;
+		case 'Feb':
+			month = 'Fev';
+			break;
+		case 'Mar':
+			month = 'Mar';
+			break;
+		case 'Apr':
+			month = 'Abr';
+			break;
+		case 'May':
+			month = 'Mai';
+			break;
+		case 'Jun':
+			month = 'Jun';
+			break;
+		case 'Jul':
+			month = 'Jul';
+			break;
+		case 'Aug':
+			month = 'Ago';
+			break;
+		case 'Sep':
+			month = 'Set';
+			break;
+		case 'Oct':
+			month = 'Out';
+			break;
+		case 'Nov':
+			month = 'Nov';
+			break;
+		default:
+			month = 'Dez';
+	}
+
+	const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
+
+	console.log(`Appliance: ${appliance}`);
+
+	aVEmailSender(
+		appliance,
+		destination,
+		source,
+		policy,
+		timeString,
+		description,
+		reason,
+		authUser,
+		virus,
+		host,
+		path,
+	);
+};
+
 const emailStalker = async () => {
 	console.log('Stalker Running');
 
@@ -267,6 +495,11 @@ const emailStalker = async () => {
 									if (message.includes('IPS')) {
 										console.log('IPS EMAIL');
 										parseIPSEmails(message);
+									}
+
+									if (message.includes('-av')) {
+										console.log('AV EMAIL');
+										parseAVEmails(message);
 									}
 								});
 							});
