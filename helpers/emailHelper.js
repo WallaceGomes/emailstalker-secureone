@@ -13,8 +13,8 @@ const ipsEmailSender = async (
 	description,
 ) => {
 	const transport = nodemailer.createTransport({
-		host: 'br530.hostgator.com.br',
-		name: 'hostgator.com',
+		host: 'smtp.office365.com',
+		name: 'smtp.office365.com',
 		port: 587,
 		secure: false,
 		auth: {
@@ -126,10 +126,10 @@ const aVEmailSender = async (
 	path,
 ) => {
 	const transport = nodemailer.createTransport({
-		host: 'br530.hostgator.com.br',
-		name: 'hostgator.com',
+		host: 'smtp.office365.com',
+		name: 'smtp.office365.com',
 		port: 587,
-		secure: false,
+		secure: true,
 		auth: {
 			user: process.env.MAILER_EMAIL,
 			pass: process.env.MAILER_PASS,
@@ -338,25 +338,26 @@ const parseIPSEmails = (message) => {
 };
 
 const parseAVEmails = (message) => {
+	console.log(message);
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
 
 	const auxDestination = message.split('Destination IP: ', 2);
-	const destination = auxDestination[1].split('Destination', 1)[0];
+	const destination = auxDestination[1].split('\n', 1)[0];
 
 	const auxSource = message.split('Source IP: ', 2);
-	const source = auxSource[1].split('Source', 1)[0];
+	const source = auxSource[1].split('\n', 1)[0];
 
 	const auxPolicy = message.split('Policy Name: ', 2);
 	const policy = auxPolicy[1].split('\n', 1)[0];
 
-	const auxAuthUser = message.split('Authenticated User: ', 2);
+	const auxAuthUser = message.split('User: ', 2);
 	const authUser = auxAuthUser[1].split('\n', 1)[0];
 
 	const auxVirus = message.split('virus: ', 2);
 	const virus = auxVirus[1].split('\n', 1)[0];
 
-	const auxHost = message.split('host: ', 2);
+	const auxHost = message.split('host:\n', 2);
 	const host = auxHost[1].split('\n', 1)[0];
 
 	const auxPath = message.split('path: ', 2);
@@ -368,6 +369,18 @@ const parseAVEmails = (message) => {
 	const auxTime = message.split('Time: ', 2);
 	const time = auxTime[1].split('(', 1)[0];
 	const dateArray = time.split(' ');
+
+	console.log(appliance);
+	console.log(destination);
+	console.log(source);
+	console.log(policy);
+	console.log(timeString);
+	console.log(description);
+	console.log(reason);
+	console.log(authUser);
+	console.log(virus);
+	console.log(host);
+	console.log(path);
 
 	let dayOfTheWeek;
 	let month;
@@ -437,19 +450,19 @@ const parseAVEmails = (message) => {
 
 	console.log(`Appliance: ${appliance}`);
 
-	aVEmailSender(
-		appliance,
-		destination,
-		source,
-		policy,
-		timeString,
-		description,
-		reason,
-		authUser,
-		virus,
-		host,
-		path,
-	);
+	// aVEmailSender(
+	// 	appliance,
+	// 	destination,
+	// 	source,
+	// 	policy,
+	// 	timeString,
+	// 	description,
+	// 	reason,
+	// 	authUser,
+	// 	virus,
+	// 	host,
+	// 	path,
+	// );
 };
 
 const emailStalker = async () => {
@@ -459,7 +472,7 @@ const emailStalker = async () => {
 		imap: {
 			user: process.env.MAILER_EMAIL,
 			password: process.env.MAILER_PASS,
-			host: 'mail.secureoneinfo.com.br',
+			host: 'outlook.office365.com',
 			port: 993,
 			tls: true,
 			tlsOptions: { rejectUnauthorized: false },
@@ -499,7 +512,8 @@ const emailStalker = async () => {
 
 									if (message.includes('-av')) {
 										console.log('AV EMAIL');
-										parseAVEmails(message);
+										console.log(message);
+										// parseAVEmails(message);
 									}
 								});
 							});
