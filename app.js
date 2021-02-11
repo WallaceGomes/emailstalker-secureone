@@ -6,7 +6,7 @@ const error = require('./middleware/error');
 const routes = require('./routes');
 const { emailStalker } = require('./helpers/emailHelper');
 
-const MINUTESTOCHECK = 1;
+const MINUTESTOCHECK = 0.6;
 
 const app = express();
 

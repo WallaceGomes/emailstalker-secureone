@@ -27,7 +27,7 @@ const ipsEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			to: `notificacao@secureone.com.br`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -46,7 +46,7 @@ const ipsEmailSender = async (
 				Alerta de segurança!
 			</p>
 			<br />
-			<p>Tentativa de ataque bloqueada.</p>
+			<p>Sistema de prevenção de intrusão executado.</p>
 			<section style="line-height: 2px">
 				<p style="font-weight: 600">
 					Categoria: <span style="font-weight: 400;">${description}</span>
@@ -140,7 +140,7 @@ const aVEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			to: `notificacao@secureone.com.br`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -154,7 +154,7 @@ const aVEmailSender = async (
 				Alerta de segurança!
 			</p>
 			<br />
-			<p>Tentativa de ataque bloqueada.</p>
+			<p>Proteção de antivírus executada com sucesso.</p>
 			<section style="line-height: 2px">
 				<p style="font-weight: 600">
 					Categoria: <span style="font-weight: 400">${description}</span>
@@ -225,7 +225,7 @@ const aVEmailSender = async (
 		});
 };
 
-const parseIPSEmails = (message) => {
+const parseIPSEmails = async (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
 
@@ -326,7 +326,7 @@ const parseIPSEmails = (message) => {
 	// console.log(timeString);
 	// console.log(description);
 
-	ipsEmailSender(
+	await ipsEmailSender(
 		appliance,
 		destination,
 		source,
@@ -337,8 +337,7 @@ const parseIPSEmails = (message) => {
 	);
 };
 
-const parseAVEmails = (message) => {
-	console.log(message);
+const parseAVEmails = async (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
 
@@ -450,7 +449,7 @@ const parseAVEmails = (message) => {
 	// console.log(host);
 	// console.log(path);
 
-	aVEmailSender(
+	await aVEmailSender(
 		appliance,
 		destination,
 		source,
@@ -499,20 +498,25 @@ const emailStalker = async () => {
 								let all = _.find(item.parts, { which: '' });
 								var id = item.attributes.uid;
 								var idHeader = 'Imap-Id: ' + id + '\r\n';
-								simpleParser(idHeader + all.body, (err, mail) => {
+								simpleParser(idHeader + all.body, async (err, mail) => {
 									const message = mail.text;
+									const subject = mail.subject;
+
+									if (subject === 'Alerta de segurança') {
+										return;
+									}
 
 									console.log('Email fetched');
-									// console.log(message);
+									console.log(subject);
 
 									if (message.includes('IPS')) {
 										console.log('IPS EMAIL');
-										parseIPSEmails(message);
+										await parseIPSEmails(message);
 									}
 
 									if (message.includes('-av')) {
 										console.log('AV EMAIL');
-										parseAVEmails(message);
+										await parseAVEmails(message);
 									}
 								});
 							});
