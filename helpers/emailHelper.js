@@ -11,6 +11,8 @@ const ipsEmailSender = async (
 	policy,
 	time,
 	description,
+	destinationPort,
+	sourcePort,
 ) => {
 	const transport = nodemailer.createTransport({
 		host: 'smtp.office365.com',
@@ -55,10 +57,16 @@ const ipsEmailSender = async (
 					Local: <span style="font-weight: 400; color: orange">${appliance}</span>
 				</p>
 				<p style="font-weight: 600">
-					Origem: <span style="font-weight: 400">${source}</span>
+					IP Origem: <span style="font-weight: 400">${source}</span>
 				</p>
 				<p style="font-weight: 600">
-					Destino: <span style="font-weight: 400">${destination}</span>
+					IP Destino: <span style="font-weight: 400">${destination}</span>
+				</p>
+				<p style="font-weight: 600">
+					Porta Origem: <span style="font-weight: 400">${sourcePort}</span>
+				</p>
+				<p style="font-weight: 600">
+					Porta Destino: <span style="font-weight: 400">${destinationPort}</span>
 				</p>
 				<p style="font-weight: 600">
 					ID da ameaça:
@@ -232,8 +240,14 @@ const parseIPSEmails = async (message) => {
 	const auxDestination = message.split('Destination IP: ', 2);
 	const destination = auxDestination[1].split('Destination', 1)[0];
 
+	const auxDestinationPort = message.split('Destination Port: ', 2);
+	const destinationPort = auxDestinationPort[1].split('Rule', 1)[0];
+
 	const auxSource = message.split('Source IP: ', 2);
 	const source = auxSource[1].split('Source', 1)[0];
+
+	const auxSourcePort = message.split('Source Port: ', 2);
+	const sourcePort = auxSourcePort[1].split('Destination', 1)[0];
 
 	const auxRuleID = message.split('Rule ID: ', 2);
 	const ruleId = auxRuleID[1].split(',', 1)[0];
@@ -319,12 +333,6 @@ const parseIPSEmails = async (message) => {
 	const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
 
 	console.log(`Appliance: ${appliance}`);
-	// console.log(destination);
-	// console.log(source);
-	// console.log(ruleId);
-	// console.log(policy);
-	// console.log(timeString);
-	// console.log(description);
 
 	await ipsEmailSender(
 		appliance,
@@ -334,6 +342,8 @@ const parseIPSEmails = async (message) => {
 		policy,
 		timeString,
 		description,
+		destinationPort,
+		sourcePort,
 	);
 };
 
