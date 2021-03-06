@@ -3,6 +3,10 @@ const _ = require('lodash');
 const simpleParser = require('mailparser').simpleParser;
 const nodemailer = require('nodemailer');
 
+function capitalizeFirstLetter(string) {
+	return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const ipsEmailSender = async (
 	appliance,
 	destination,
@@ -29,7 +33,8 @@ const ipsEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
+			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
+			to: `wallacecardosogomes@gmail.com`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -148,7 +153,8 @@ const aVEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
+			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
+			to: `wallacecardosogomes@gmail.com`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -347,6 +353,56 @@ const parseIPSEmails = async (message) => {
 	);
 };
 
+const parseIPSEmailsFromCloud = async (message) => {
+	const auxLocal = message.split('device ', 2);
+	const local = auxLocal[1].split(':', 1)[0];
+	const auxDestination = message.split('Destination IP: <a href="http://', 2);
+	const destinationIp = auxDestination[1].split('Destination', 1)[0];
+	const auxDestinationPort = message.split('Destination Port: ', 2);
+	const destinationPort = auxDestinationPort[1].split('\n', 1)[0];
+	const auxSource = message.split('Source IP: ', 2);
+	const sourceIp = auxSource[1].split('Source', 1)[0];
+	const auxSourcePort = message.split('Source Port: ', 2);
+	const sourcePort = auxSourcePort[1].split('Destination', 1)[0];
+	const auxRuleID = message.split('Rule ID: ', 2);
+	const ruleId = auxRuleID[1].split(',', 1)[0];
+	const auxPolicy = message.split('Policy Name: ', 2);
+	const policy = auxPolicy[1].split('\n', 1)[0];
+	const description = 'Intrusion Prevention Service';
+
+	const auxWhen = message.split('WHEN:\n\n', 2);
+	const when = auxWhen[1].split('\n', 1)[0];
+
+	const dateString = capitalizeFirstLetter(
+		new Date().toLocaleString('pt-BR', {
+			dateStyle: 'long',
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}),
+	);
+
+	const hourString = new Date().toLocaleString('pt-BR', {
+		timeStyle: 'short',
+		hour12: false,
+	});
+
+	console.log(`Local: ${local}`);
+	console.log(`Ip Destino: ${destinationIp}`);
+	console.log(`Porta Destino: ${destinationPort}`);
+	console.log(`Ip Origem: ${sourceIp}`);
+	console.log(`Porta Origem: ${sourcePort}`);
+	console.log(`Descrição: ${description}`);
+	console.log(`RuleID: ${ruleId}`);
+	console.log(`Política: ${policy}`);
+	console.log(`Quando: ${when}`);
+	console.log(`Datestring: ${dateString}`);
+	console.log(`HourString: ${hourString}`);
+
+	console.log(`Local: ${local}`);
+};
+
 const parseAVEmails = async (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
@@ -495,7 +551,10 @@ const emailStalker = async () => {
 			return connection
 				.openBox('INBOX')
 				.then(function () {
-					let searchCriteria = ['UNSEEN'];
+					let searchCriteria = [
+						'UNSEEN',
+						// ['HEADER', 'FROM', `${process.env.FILTER_FROM}`],
+					];
 					let fetchOptions = {
 						bodies: ['HEADER', 'TEXT', ''],
 						markSeen: true,
@@ -510,23 +569,27 @@ const emailStalker = async () => {
 								var idHeader = 'Imap-Id: ' + id + '\r\n';
 								simpleParser(idHeader + all.body, async (err, mail) => {
 									const message = mail.text;
+									const mailHtml = mail.html;
 									const subject = mail.subject;
+									const from = mail.from;
 
-									if (subject === 'Alerta de segurança') {
-										return;
-									}
+									// if (subject === 'Alerta de Segurança') {
+									// 	return;
+									// }
 
-									console.log('Email fetched');
-									console.log(subject);
+									console.log(`Email from ${from.text} fetched!`);
+									// console.log(mailHtml);
 
-									if (message.includes('IPS')) {
-										console.log('IPS EMAIL');
-										await parseIPSEmails(message);
-									}
+									if (from === `${process.env.MAILER_EMAIL}`) {
+										if (message.includes('IPS')) {
+											console.log('IPS EMAIL');
+											await parseIPSEmails(message);
+										}
 
-									if (message.includes('-av')) {
-										console.log('AV EMAIL');
-										await parseAVEmails(message);
+										if (message.includes('-av')) {
+											console.log('AV EMAIL');
+											await parseAVEmails(message);
+										}
 									}
 								});
 							});
