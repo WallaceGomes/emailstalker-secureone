@@ -717,7 +717,7 @@ const parseIPSEmailsFromCloud = async (message) => {
 	// const when = auxWhen[1].split('\n', 1)[0];
 
 	const dayString = capitalizeFirstLetter(
-		new Date().toLocaleString('pt-BR', {
+		new Date().toLocaleString('pt_BR', {
 			dateStyle: 'long',
 			weekday: 'long',
 			year: 'numeric',
@@ -726,7 +726,7 @@ const parseIPSEmailsFromCloud = async (message) => {
 		}),
 	);
 
-	const hourString = new Date().toLocaleString('pt-BR', {
+	const hourString = new Date().toLocaleString('pt_BR', {
 		timeStyle: 'short',
 		hour12: false,
 	});
