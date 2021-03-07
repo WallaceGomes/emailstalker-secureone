@@ -6,8 +6,6 @@ const error = require('./middleware/error');
 const routes = require('./routes');
 const { emailStalker } = require('./helpers/emailHelper');
 
-const MINUTESTOCHECK = 0.6;
-
 const app = express();
 
 app.use(bodyParser.json({ limit: '25MB' }));
@@ -19,6 +17,6 @@ app.use(routes);
 //error middleware
 app.use(error);
 
-setInterval(() => emailStalker(), MINUTESTOCHECK * 60 * 1000);
+setInterval(() => emailStalker(), process.env.MINUTESTOCHECK * 60 * 1000);
 
 module.exports = app;
