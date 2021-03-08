@@ -1,0 +1,154 @@
+<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
+	<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
+		<span style="color:rgb(243,144,29)">Alerta de segurança!</span>
+	</h3>
+	<h4 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:12pt; margin-right:0cm; margin-left:0cm">
+		<span style="color:#555555">Informação:&nbsp;</span>
+	</h4>
+	<div>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>Categoria: </b><span style="color:rgb(243,144,29)">Intrusion Prevention Service</span><span
+				style="color:rgb(243,144,29)"><b>
+				</b></span><b><span style="color:rgb(243,144,29)">&nbsp;</span><br>
+				<br>
+			</b>
+		</p>
+		<p style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin-right:0cm; margin-left:0cm">
+			<b style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt">Local:
+			</b><span
+				style="color:rgb(243,144,29); font-family:Calibri,sans-serif; font-size:11pt">${local}</span><span
+				style="color:rgb(243,144,29); font-family:Calibri,sans-serif; font-size:11pt"><b>
+				</b></span><b style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt"><span
+					style="color:rgb(243,144,29)">&nbsp;</span><br>
+			</b><b
+				style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+					style="background-color:rgb(255,255,255)">Razão:</b><span style="font-weight:400; background-color:rgb(255,255,255); display:inline!important; color:rgb(243,144,29)"> Tentativa	de Intrusão</span><br>
+			</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+					style="background-color:rgb(255,255,255)"></b><b style="background-color:rgb(255,255,255)"><b
+						style="background-color:rgb(255,255,255)">Ação:<span style="margin:0px">&nbsp;</span></b><span
+						style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">Proteção	executada com sucesso</span></b><span
+					style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
+			</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">IP Origem:
+			</b><span style="font-family:Calibri,sans-serif; font-size:11pt; color:rgb(85,85,85)">${source}
+			</span><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">&nbsp;</b><b><br>
+			</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>IP Destino: </b>${destination} <b>&nbsp;</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>Porta Origem: </b>${sourcePort} <b>&nbsp;</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>Porta Destino: </b>${destinationPort} <b>&nbsp;</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>ID da ameaça: </b><span style="color:rgb(243,144,29)">${ruleId}</span><span style="color:rgb(243,144,29)"><b>
+				</b></span><b><span style="color:rgb(243,144,29)">&nbsp;</span><br>
+			</b><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">Hora:
+			</b><span style="font-family:Calibri,sans-serif; font-size:11pt; color:rgb(85,85,85)">${dateString}</span><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">
+				&nbsp;</b><b><br>
+			</b>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+			<b>Política: </b>${policy}<b>&nbsp;</b>
+		</p>
+		<br>
+	</div>
+	<div><span style="font-family:Calibri,Helvetica,sans-serif">Para mais informações desta ameaça:</span>
+		<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
+					href="https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}"
+					id="LPlnk677473">https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}</a></span><br>
+		</div>
+		<div><br>
+		</div>
+		<div><br>
+		</div>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555"><span
+				style="margin:0px; font-size:14.6667px; font-family:Calibri,sans-serif; color:rgb(243,144,29); background-color:rgb(255,255,255)">Intrusion
+				Prevention Service</span><span
+				style="margin:0px; font-size:14.6
+	667px; font-family:Calibri,sans-serif; color:rgb(243,144,29); background-color:rgb(255,255,255)"><b><span>&nbsp;</span>
+				</b></span><b
+				style="font-family:Calibri,sans-serif; font-size:14.6667px; background-color:rgb(255,255,255)"><span styl
+					e="margin:0px; color:rgb(243,144,29)">&nbsp;</span></b></span>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555">O Intrusion Prevention Service utiliza assinaturas atualizadas continuamente para varrer
+			o
+			tráfego na maioria dos protocolos, fornecendo proteção em tempo real contra ameaças, incluindo spyware, injeções
+			de
+			SQL
+			, cross-site scripting
+			e buffer overflow.<br>
+		</span>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555"><br>
+		</span>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555"><br>
+		</span>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555"><b>Sistema de monitoramento Secureone</b></span>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<br>
+	</div>
+	<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+		<span style="color:#555555"><br>
+		</span>
+	</div>
+	<p
+		style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:11pt; margin:0cm">
+		<br>
+	</p>
+	<p style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:11pt; margin:0cm; text-align:center; background:rgb(221,221,
+	221)">
+		<span style="font-size:9.0pt; color:#555555">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA
+			<br>
+			Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031 <a
+				href="mailto:atendimento@secureone.com.br">
+				atendimento@secureone.com.br</a> &nbsp;</span>
+	</p>
+	<br>
+	</div>
+	<div style="font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+		<br>
+	</div>
+	<div style="font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+			<span style="margin:0px">&nbsp;</span>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+			<span style="margin:0px"><br>
+			</span>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+			<span style="margin:0px"><br>
+			</span>
+		</p>
+		<p
+			style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+</body>
