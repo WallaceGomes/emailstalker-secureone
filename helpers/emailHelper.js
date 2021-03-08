@@ -696,15 +696,15 @@ const parseIPSEmailsFromCloud = async (message) => {
 	const auxDestination = message.split('Destination IP: ', 2);
 	const destinationIp = auxDestination[1].split('Destination', 1)[0];
 	const auxDestinationPort = message.split('Destination Port: ', 2);
-	const destinationPort = auxDestinationPort[1].split('\n', 1)[0];
-	const auxSource = message.split('Source IP:\n', 2);
+	const destinationPort = auxDestinationPort[1].split('Rule', 1)[0];
+	const auxSource = message.split('Source IP: ', 2);
 	const sourceIp = auxSource[1].split('Source', 1)[0];
 	const auxSourcePort = message.split('Source Port: ', 2);
 	const sourcePort = auxSourcePort[1].split('Destination', 1)[0];
 	const auxRuleID = message.split('Rule ID: ', 2);
 	const ruleId = auxRuleID[1].split(',', 1)[0];
 	const auxPolicy = message.split('Policy Name: ', 2);
-	const policy = auxPolicy[1].split('\n', 1)[0];
+	const policy = auxPolicy[1].split(' ', 1)[0];
 
 	// const auxWhen = message.split('WHEN:\n\n', 2);
 	// const when = auxWhen[1].split('\n', 1)[0];
@@ -742,10 +742,8 @@ const parseIPSEmailsFromCloud = async (message) => {
 	// console.log(`Porta Destino: ${destinationPort}`);
 	// console.log(`Ip Origem: ${sourceIp}`);
 	// console.log(`Porta Origem: ${sourcePort}`);
-	// console.log(`Descrição: ${description}`);
 	// console.log(`RuleID: ${ruleId}`);
 	// console.log(`Política: ${policy}`);
-	// console.log(`Quando: ${when}`);
 	// console.log(`Dia: ${dayString}`);
 	// console.log(`Hora: ${hourString}`);
 };
@@ -917,7 +915,7 @@ const parseAVEmails = async (message) => {
 };
 
 const emailStalker = async () => {
-	console.log('Stalker Running');
+	console.log('Stalker Running...');
 
 	const config = {
 		imap: {
@@ -986,7 +984,7 @@ const emailStalker = async () => {
 										}
 										if (mailHtml.includes('IPS match')) {
 											console.log('IPS MATCH ALERT');
-											await parseIPSEmailsFromCloud(mailText);
+											await parseIPSEmailsFromCloud(mailHtml);
 										}
 									} else {
 										console.log('Analizing email from local...');
