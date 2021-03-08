@@ -33,8 +33,7 @@ const ipsEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			to: `wallacecardosogomes@gmail.com`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -153,8 +152,7 @@ const aVEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			to: `wallacecardosogomes@gmail.com`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body
 			style="
@@ -264,8 +262,7 @@ const ipsCloudEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			to: `wallacecardosogomes@gmail.com`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
@@ -461,8 +458,7 @@ const portScamCloudEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			to: `wallacecardosogomes@gmail.com`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
@@ -473,11 +469,8 @@ const portScamCloudEmailSender = async (
 				<span style="margin:0px; color:rgb(85,85,85)">Informação:&nbsp;</span>
 			</h4>
 			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
-					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif"><b
-							style="color:inherit; font-family:inherit; font-size:inherit; font-style:inherit; font-variant-ligatures:inherit; font-variant-caps:inherit">Categoria</b>:
-						<spa n style="color:rgb(81,167,249)">&nbsp;
-				</span><span style="color:rgb(81,167,249)">Port
-					Scan</span><br>
+					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
+					<b style="color:inherit; font-family:inherit; font-size:inherit; font-style:inherit; font-variant-ligatures:inherit; font-variant-caps:inherit">Categoria</b>:<span style="color:rgb(81,167,249)">&nbsp;</span><span style="color:rgb(81,167,249)">Port Scan</span><br>
 			</div>
 			<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
 				<div style="margin:0px"><span style="margin:0px; color:rgb(200,38,19)"><br>
@@ -985,17 +978,15 @@ const emailStalker = async () => {
 										return;
 									}
 
-									if (process.env.STALKER_ENV === 'CLOUD') {
-										if (from.text === `${process.env.CLOUD_EMAIL}`) {
-											console.log('Analizing email from cloud...');
-											if (mailHtml.includes('port_scan_dos')) {
-												console.log('PORT SCAM ALERT');
-												await parsePORTSCAMEmailsFromCloud(mailHtml);
-											}
-											if (mailHtml.includes('IPS match')) {
-												console.log('IPS MATCH ALERT');
-												await parseIPSEmailsFromCloud(mailText);
-											}
+									if (from.text === `${process.env.CLOUD_EMAIL}`) {
+										console.log('Analizing email from cloud...');
+										if (mailHtml.includes('port_scan_dos')) {
+											console.log('PORT SCAM ALERT');
+											await parsePORTSCAMEmailsFromCloud(mailHtml);
+										}
+										if (mailHtml.includes('IPS match')) {
+											console.log('IPS MATCH ALERT');
+											await parseIPSEmailsFromCloud(mailText);
 										}
 									} else {
 										console.log('Analizing email from local...');
