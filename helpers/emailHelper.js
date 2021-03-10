@@ -387,36 +387,14 @@ const ipsCloudEmailSender = async (
 				style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:11pt; margin:0cm">
 				<br>
 			</p>
-			<p style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:11pt; margin:0cm; text-align:center; background:rgb(221,221,
-			221)">
-				<span style="font-size:9.0pt; color:#555555">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA
-					<br>
-					Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031 <a
-						href="mailto:atendimento@secureone.com.br">
-						atendimento@secureone.com.br</a> &nbsp;</span>
+			<p class="x_x_MsoNormal" align="center"
+				style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin:0cm; font-size:11pt; font-family:Calibri,sans-serif; text-align:center; background:rgb(221,221,221)">
+				<span style="margin:0px; font-size:9pt; color:rgb(85,85,85)">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA<br>
+					Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031<span
+						style="margin:0px">&nbsp;</span><a href="mailto:atendimento@secureone.com.br"
+						style="margin:0px">atendimento@secureone.com.br</a><span style="margin:0px">
+						&nbsp;</span>&nbsp;</span>
 			</p>
-			<br>
-			</div>
-			<div style="font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
-				<br>
-			</div>
-			<div style="font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt; color:rgb(0,0,0)">
-				<p
-					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
-					<span style="margin:0px">&nbsp;</span>
-				</p>
-				<p
-					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
-					<span style="margin:0px"><br>
-					</span>
-				</p>
-				<p
-					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
-					<span style="margin:0px"><br>
-					</span>
-				</p>
-				<p
-					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
 		</body>
 
 		`,
