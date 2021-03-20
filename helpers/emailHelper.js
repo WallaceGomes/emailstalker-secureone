@@ -554,6 +554,197 @@ const portScamCloudEmailSender = async (
 		});
 };
 
+const virusCloudEmailSender = async (
+	local,
+	destination,
+	source,
+	policy,
+	dateString,
+	authUser,
+	virus,
+	host,
+	path,
+) => {
+	const transport = nodemailer.createTransport({
+		host: 'smtp.office365.com',
+		name: 'smtp.office365.com',
+		port: 587,
+		secure: false,
+		auth: {
+			user: process.env.MAILER_EMAIL,
+			pass: process.env.MAILER_PASS,
+		},
+	});
+	//
+
+	transport
+		.sendMail({
+			from: process.env.MAILER_EMAIL,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
+			subject: 'Alerta de segurança',
+			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
+			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
+				<span style="margin:0px; color:rgb(200,38,19)">Alerta de segurança!</span>
+			</h3>
+			<h4 style="font-size:12pt; background-color:rgb(255,255,255); margin-right:0cm; margin-left:0cm; font-family:Calibri,sa
+				ns-serif">
+				<span style="margin:0px; color:rgb(85,85,85)">Informação:&nbsp;</span>
+			</h4>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
+					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif"><b style="color:inherit; font-family:inherit; font-size:inherit; font-style:inherit; font-variant-ligatures:inherit; font-variant-caps:inherit">Categoria</b>:
+						<span style="color:rgb(200,38,19)">Gateway Antivírus Policies</span><br>
+					</div>
+					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
+						<div><span style="color:rgb(200,38,19)"><br>
+							</span></div>
+						<div><b>Local</b>: <span style="color:rgb(200,38,19)">${local}</span>
+						</div>
+						<div><b>Razão</b>: <span style="color:rgb(200,38,19)">Virus encontrado</span></div>
+						<div><b></b><b style="background-color:rgb(255,255,255)"><b style="background-color:rgb(255,255,255)">Ação:<span style="margin:0px">&nbsp;</span></b><span style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">Proteção executada com sucesso</span></b></div>
+						<div><b>Usuário autenticado</b>: <span style="color:rgb(0,0,0)">${authUser}</span>
+						</div>
+						<div><b>Origem</b>: ${source} </div>
+						<div><b>Destino</b>: ${destination} </div>
+						<div><b>Hora</b>: ${dateString} </div>
+						<div><b>Política</b>: ${policy} </div>
+						<div><br>
+						</div>
+						<div><br>
+						</div>
+						<div>Informações do Vírus:</div>
+						<div><br>
+						</div>
+						<div><b>Virus</b>: <span style="color:rgb(200,38,19)">${virus}</span></div>
+						<div><b>Host</b>:<a style="color:rgb(200,38,19); text-decoration: none"> ${host}</a></div>
+						<b>Path</b>: <span style="color:rgb(200,38,19)">${path}</span>
+						<br>
+					</div>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><span style="color:rgb(200,38,19); font-family:Calibri,sans-serif; font-size:14.6667px; background-color:rgb(255,255,255); display:in
+				line!important">Gateway
+						Antivírus Policies</span><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
+			Assinaturas atualizadas continuamente para identificar e bloquear spywares, vírus, cavalos de troia, rogueware e ameaças mistas,
+					não
+					só para os vírus conhecidos
+					como também para as suas novas variações. Ao mesmo tempo, a análise heurística rastreia dados, construções e ações
+					sus
+					peitos para garantir que os vírus desconhecidos não passem despercebidos.<br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><b><span
+							style="margin:0px"><span style="margin:0px">Sistema de monitoramento Secureone</span></span><br>
+					</b><span style="margin:0px"></span><br>
+				</span></div>
+			<p class="x_x_MsoNormal" style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color
+				:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+				<br>
+			</p>
+			<p class="x_x_MsoNormal" align="center" style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin:0cm; font-size:11pt; font-family:Calibri,sans-serif; text-align:center; background:rgb(221,221,221)">
+				<span style="margin:0px; font-size:9pt; color:rgb(85,85,85)">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA<br>
+					Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031<span>&nbsp;</span><a href="mailto:atendi
+				mento@secureone.com.br" style="margin:0px">atendimento@secureone.com.br</a><span>&nbsp;</span>&nbsp;</span>
+			</p>
+			<br>
+			</div>
+
+		</body>
+		`,
+		})
+		.then(() => {
+			console.log(`Email delivered to client ${local}`);
+		})
+		.catch((err) => {
+			console.log('Errors occurred, failed to deliver the email');
+
+			if (err.response && err.response.body && err.response.body.errors) {
+				err.response.body.errors.forEach((error) =>
+					console.log('%s: %s', error.field, error.message),
+				);
+			} else {
+				console.log(err);
+			}
+		});
+};
+
+const parseAVEmailsFromCloud = async (message) => {
+	const auxLocal = message.split('device ', 2);
+	const local = auxLocal[1].split(':', 1)[0];
+
+	const auxDestination = message.split('Destination IP: ', 2);
+	const destination = auxDestination[1].split(' ', 1)[0];
+
+	const auxSource = message.split('Source IP: ', 2);
+	const source = auxSource[1].split(' ', 1)[0];
+
+	const auxPolicy = message.split('Policy Name: ', 2);
+	const policy = auxPolicy[1].split(' ', 1)[0];
+
+	const auxAuthUser = message.split('User: ', 2);
+	const authUser = auxAuthUser[1].split(' ', 1)[0];
+
+	const auxVirus = message.split('virus: ', 2);
+	const virus = auxVirus[1].split(' ', 1)[0];
+
+	const auxHost = message.split('host: ', 2);
+	const host = auxHost[1].split(' ', 1)[0];
+
+	const auxPath = message.split('path: ', 2);
+	const path = auxPath[1].split('\n', 1)[0];
+
+	const description = 'Gateway Antivírus Policies';
+	const reason = 'Virus encontrado';
+
+	const dayString = capitalizeFirstLetter(
+		new Date().toLocaleString('pt-BR', {
+			dateStyle: 'long',
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}),
+	);
+
+	const hourString = new Date().toLocaleString('pt-BR', {
+		timeStyle: 'short',
+		hour12: false,
+	});
+
+	const dateString = `${dayString} às ${hourString}`;
+	console.log(`Local: ${local}`);
+
+	// console.log(local);
+	// console.log(destination);
+	// console.log(source);
+	// console.log(policy);
+	// console.log(dateString);
+	// console.log(description);
+	// console.log(authUser);
+	// console.log(virus);
+	// console.log(host);
+	// console.log(path);
+
+	await virusCloudEmailSender(
+		local,
+		destination,
+		source,
+		policy,
+		dateString,
+		authUser,
+		virus,
+		host,
+		path,
+	);
+};
+
 const parseIPSEmails = async (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
@@ -963,6 +1154,11 @@ const emailStalker = async () => {
 										if (mailHtml.includes('IPS match')) {
 											console.log('IPS MATCH ALERT');
 											await parseIPSEmailsFromCloud(mailHtml);
+										}
+
+										if (mailHtml.includes('-av')) {
+											console.log('ANTI VIRUS ALERT');
+											await parseAVEmailsFromCloud(mailHtml);
 										}
 									} else {
 										console.log('Analizing email from local...');
