@@ -580,8 +580,7 @@ const virusCloudEmailSender = async (
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
-			// to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			to: `wallacecardosogomes@gmail.com`,
+			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
 			subject: 'Alerta de segurança',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
