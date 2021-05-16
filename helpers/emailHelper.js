@@ -34,77 +34,138 @@ const ipsEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança',
-			html: `<body
-			style="
-				max-width: 720px;
-				margin-top: 20px;
-				margin-left: 10px;
-				font-family: 'Calibri', sans-serif;
-			"
-			>
+			subject: 'Alerta de segurança Intrusion Prevention!',
+			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
+			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
+				<span style="color:rgb(243,144,29)">Alerta de segurança!</span>
+			</h3>
+			<h4 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:12pt; margin-right:0cm; margin-left:0cm">
+				<span style="color:#555555">Informação:&nbsp;</span>
+			</h4>
+			<div>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>Categoria: </b><span style="color:rgb(243,144,29)">Intrusion Prevention Service</span><span
+						style="color:rgb(243,144,29)"><b>
+						</b></span><b><span style="color:rgb(243,144,29)">&nbsp;</span><br>
+						<br>
+					</b>
+				</p>
+				<p style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin-right:0cm; margin-left:0cm">
+					<b style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt">Local:
+					</b><span
+						style="color:rgb(243,144,29); font-family:Calibri,sans-serif; font-size:11pt">${appliance}</span><span
+						style="color:rgb(243,144,29); font-family:Calibri,sans-serif; font-size:11pt"><b>
+						</b></span><b style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt"><span
+							style="color:rgb(243,144,29)">&nbsp;</span><br>
+					</b><b
+						style="color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+							style="background-color:rgb(255,255,255)">Razão:</b><span style="font-weight:400; background-color:rgb(255,255,255); display:inline!important; color:rgb(243,144,29)"> Tentativa	de Intrusão</span><br>
+					</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+							style="background-color:rgb(255,255,255)"></b><b style="background-color:rgb(255,255,255)"><b
+								style="background-color:rgb(255,255,255)">Ação:<span style="margin:0px">&nbsp;</span></b><span
+								style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">Proteção executada com sucesso</span></b><span
+							style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
+					</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">IP Origem:
+					</b><span style="font-family:Calibri,sans-serif; font-size:11pt; color:rgb(85,85,85)">${source}
+					</span><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">&nbsp;</b><b><br>
+					</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>IP Destino: </b>${destination} <b>&nbsp;</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>Porta Origem: </b>${sourcePort} <b>&nbsp;</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>Porta Destino: </b>${destinationPort} <b>&nbsp;</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>ID da ameaça: </b><span style="color:rgb(243,144,29)">${ruleId}</span><span style="color:rgb(243,144,29)"><b>
+						</b></span><b><span style="color:rgb(243,144,29)">&nbsp;</span><br>
+					</b><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">Hora:
+					</b><span style="font-family:Calibri,sans-serif; font-size:11pt; color:rgb(85,85,85)">${time}</span><b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit">
+						&nbsp;</b><b><br>
+					</b>
+				</p>
+				<p
+					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+					<b>Política: </b>${policy}<b>&nbsp;</b>
+				</p>
+				<br>
+			</div>
+			<div style=""><span style="font-family:Calibri,Helvetica,sans-serif">Para mais informações desta ameaça:</span>
+				<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
+							href="https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}"
+							id="LPlnk677473">https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}</a></span><br>
+				</div>
+				<div><br>
+				</div>
+				<div><br>
+				</div>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555"><span
+						style="margin:0px; font-size:14.6667px; font-family:Calibri,sans-serif; color:rgb(243,144,29); background-color:rgb(255,255,255)">Intrusion
+						Prevention Service</span><span
+						style="margin:0px; font-size:14.6
+			667px; font-family:Calibri,sans-serif; color:rgb(243,144,29); background-color:rgb(255,255,255)"><b><span>&nbsp;</span>
+						</b></span><b
+						style="font-family:Calibri,sans-serif; font-size:14.6667px; background-color:rgb(255,255,255)"><span styl
+							e="margin:0px; color:rgb(243,144,29)">&nbsp;</span></b></span>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555">O Intrusion Prevention Service utiliza assinaturas atualizadas continuamente para varrer
+					o
+					tráfego na maioria dos protocolos, fornecendo proteção em tempo real contra ameaças, incluindo spyware, injeções
+					de
+					SQL
+					, cross-site scripting
+					e buffer overflow.<br>
+				</span>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555"><br>
+				</span>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555"><br>
+				</span>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555"><b>Sistema de monitoramento Secureone</b></span>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<br>
+			</div>
+			<div style="color:rgb(0,0,0); font-family:Calibri,Arial,Helvetica,sans-serif; font-size:12pt">
+				<span style="color:#555555"><br>
+				</span>
+			</div>
 			<p
-				style="color: red;
-				font-weight: bold;
-				font-size: 30px";
-				line-height: 2px;"
-			>
-				Alerta de segurança!
+				style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:11pt; margin:0cm">
+				<br>
 			</p>
-			<br />
-			<p>Sistema de prevenção de intrusão executado.</p>
-			<section style="line-height: 2px">
-				<p style="font-weight: 600">
-					Categoria: <span style="font-weight: 400;">${description}</span>
-				</p>
-				<p style="font-weight: 600">
-					Local: <span style="font-weight: 400; color: orange">${appliance}</span>
-				</p>
-				<p style="font-weight: 600">
-					IP Origem: <span style="font-weight: 400">${source}</span>
-				</p>
-				<p style="font-weight: 600">
-					IP Destino: <span style="font-weight: 400">${destination}</span>
-				</p>
-				<p style="font-weight: 600">
-					Porta Origem: <span style="font-weight: 400">${sourcePort}</span>
-				</p>
-				<p style="font-weight: 600">
-					Porta Destino: <span style="font-weight: 400">${destinationPort}</span>
-				</p>
-				<p style="font-weight: 600">
-					ID da ameaça:
-					<span style="font-weight: 400; color: orange">${ruleId}</span>
-				</p>
-				<p style="font-weight: 600">
-					Hora: <span style="font-weight: 400">${time}</span>
-				</p>
-				<p style="font-weight: 600">
-					Política: <span style="font-weight: 400">${policy}</span>
-				</p>
-			</section>
-			<br />
-			<section style="line-height: 5px">
-				<p>Para mais informações desta ameaça:</p>
-				<p>
-					<a
-						href="https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}"
-						>https://securityportal.watchguard.com/Threats/Detail?ruleId=${ruleId}</a
-					>
-				</p>
-			</section>
-			<section>
-				<img
-					style="width: 180px"
-					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
-				/>
-				<p>
-					<a
-						href="https://secureone.com.br/"
-						>www.secureone.com.br</a
-					>
-				</p>
-			</section>
+			<p class="x_x_MsoNormal" align="center"
+				style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin:0cm; font-size:11pt; font-family:Calibri,sans-serif; text-align:center; background:rgb(221,221,221)">
+				<span style="margin:0px; font-size:9pt; color:rgb(85,85,85)">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA<br>
+					Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031<span
+						style="margin:0px">&nbsp;</span><a href="mailto:atendimento@secureone.com.br"
+						style="margin:0px">atendimento@secureone.com.br</a><span style="margin:0px">
+						&nbsp;</span>&nbsp;</span>
+			</p>
 		</body>
 		`,
 		})
@@ -153,71 +214,81 @@ const aVEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança',
-			html: `<body
-			style="
-				max-width: 720px;
-				margin-top: 20px;
-				margin-left: 10px;
-				font-family: 'Calibri', sans-serif;
-			"
-		>
-			<p style="color: red; font-weight: bold; font-size: 30px; line-height: 2px">
-				Alerta de segurança!
+			subject: 'Alerta de segurança Gateway Antivírus!',
+			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
+			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
+				<span style="margin:0px; color:rgb(200,38,19)">Alerta de segurança!</span>
+			</h3>
+			<h4 style="font-size:12pt; background-color:rgb(255,255,255); margin-right:0cm; margin-left:0cm; font-family:Calibri,sa
+				ns-serif">
+				<span style="margin:0px; color:rgb(85,85,85)">Informação:&nbsp;</span>
+			</h4>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
+					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif"><b style="color:inherit; font-family:inherit; font-size:inherit; font-style:inherit; font-variant-ligatures:inherit; font-variant-caps:inherit">Categoria</b>:
+						<span style="color:rgb(200,38,19)">Gateway Antivírus Policies</span><br>
+					</div>
+					<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
+						<div><span style="color:rgb(200,38,19)"><br>
+							</span></div>
+						<div><b>Local</b>: <span style="color:rgb(200,38,19)">${appliance}</span>
+						</div>
+						<div><b>Razão</b>: <span style="color:rgb(200,38,19)">Virus encontrado</span></div>
+						<div><b></b><b style="background-color:rgb(255,255,255)"><b style="background-color:rgb(255,255,255)">Ação:<span style="margin:0px">&nbsp;</span></b><span style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">Proteção executada com sucesso</span></b></div>
+						<div><b>Usuário autenticado</b>: <span style="color:rgb(0,0,0)">${authUser}</span>
+						</div>
+						<div><b>Origem</b>: ${source} </div>
+						<div><b>Destino</b>: ${destination} </div>
+						<div><b>Hora</b>: ${timeString} </div>
+						<div><b>Política</b>: ${policy} </div>
+						<div><br>
+						</div>
+						<div><br>
+						</div>
+						<div>Informações do Vírus:</div>
+						<div><br>
+						</div>
+						<div><b>Virus</b>: <span style="color:rgb(200,38,19)">${virus}</span></div>
+						<div><b>Host</b>:<a style="color:rgb(200,38,19); text-decoration: none"> ${host}</a></div>
+						<b>Path</b>: <span style="color:rgb(200,38,19)">${path}</span>
+						<br>
+					</div>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><span style="color:rgb(200,38,19); font-family:Calibri,sans-serif; font-size:14.6667px; background-color:rgb(255,255,255); display:in
+				line!important">Gateway
+						Antivírus Policies</span><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
+			Assinaturas atualizadas continuamente para identificar e bloquear spywares, vírus, cavalos de troia, rogueware e ameaças mistas,
+					não
+					só para os vírus conhecidos
+					como também para as suas novas variações. Ao mesmo tempo, a análise heurística rastreia dados, construções e ações
+					sus
+					peitos para garantir que os vírus desconhecidos não passem despercebidos.<br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><br>
+				</span></div>
+			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)"><b><span
+							style="margin:0px"><span style="margin:0px">Sistema de monitoramento Secureone</span></span><br>
+					</b><span style="margin:0px"></span><br>
+				</span></div>
+			<p class="x_x_MsoNormal" style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; background-color
+				:rgb(255,255,255); margin:0cm; font-size:11pt; font-family:Calibri,sans-serif">
+				<br>
 			</p>
-			<br />
-			<p>Proteção de antivírus executada com sucesso.</p>
-			<section style="line-height: 2px">
-				<p style="font-weight: 600">
-					Categoria: <span style="font-weight: 400">${description}</span>
-				</p>
-				<p style="font-weight: 600">
-					Local: <span style="font-weight: 400; color: orange">${appliance}</span>
-				</p>
-				<p style="font-weight: 600">
-					Razão:
-					<span style="font-weight: 400"
-						><span style="color: red">${reason}</span></span
-					>
-				</p>
-				<p style="font-weight: 600">
-					Usuário autenticado:
-					<span style="font-weight: 400"
-						><span style="color: red">${authUser}</span></span
-					>
-				</p>
-				<p style="font-weight: 600">
-					Origen: <span style="font-weight: 400">${source}</span>
-				</p>
-				<p style="font-weight: 600">
-					Destino: <span style="font-weight: 400">${destination}</span>
-				</p>
-				<p style="font-weight: 600">
-					Hora: <span style="font-weight: 400">${timeString}</span>
-				</p>
-				<p style="font-weight: 600">
-					Política: <span style="font-weight: 400">${policy}</span>
-				</p>
-				<br />
-				<section style="line-height: 2px">
-					<p style="font-weight: 600">
-						Informações do Vírus:</span><p></p>
-						<p>Virus: <span style="font-weight: 400; color: red">${virus}</p>
-						<p>Host: <span style="font-weight: 400; color: red">${host}</p>
-						<p>Path: <span style="font-weight: 400; color: red">${path}</p>
-					</p>
-				</section>
-			</section>
-			<br />
-			<section>
-				<img
-					style="width: 180px"
-					src="https://static.wixstatic.com/media/25ae14_9f0b632478c344c8a1a49e1be2e83da8~mv2.png"
-				/>
-				<p>
-					<a href="https://secureone.com.br/">www.secureone.com.br</a>
-				</p>
-			</section>
+			<p class="x_x_MsoNormal" align="center" style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; margin:0cm; font-size:11pt; font-family:Calibri,sans-serif; text-align:center; background:rgb(221,221,221)">
+				<span style="margin:0px; font-size:9pt; color:rgb(85,85,85)">SECUREONE SERVICOS DE SEGURANCA DA INFORMACAO LTDA<br>
+					Av Paulista, 807 – 23º andar São Paulo - SP Cep: 01311-915 Tel: (11) 3164-3031<span>&nbsp;</span><a href="mailto:atendi
+				mento@secureone.com.br" style="margin:0px">atendimento@secureone.com.br</a><span>&nbsp;</span>&nbsp;</span>
+			</p>
+			<br>
+			</div>
+
 		</body>
 		`,
 		})
@@ -263,7 +334,7 @@ const ipsCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança',
+			subject: 'Alerta de segurança Intrusion Prevention!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
 				<span style="color:rgb(243,144,29)">Alerta de segurança!</span>
@@ -437,7 +508,7 @@ const portScamCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança',
+			subject: 'Alerta de segurança Port Scan!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
 				<span style="margin:0px; color:rgb(81,167,249)">Alerta de segurança!</span>
@@ -581,7 +652,7 @@ const virusCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `notificacao@secureone.com.br,${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança',
+			subject: 'Alerta de segurança Gateway Antivírus!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
 				<span style="margin:0px; color:rgb(200,38,19)">Alerta de segurança!</span>
@@ -1144,6 +1215,8 @@ const emailStalker = async () => {
 										console.log('DDOS ALERT IGNORED');
 										return;
 									}
+
+									//aplicar formato novo para os emails antigos
 
 									if (from.text === `${process.env.CLOUD_EMAIL}`) {
 										console.log('Analizing email from cloud...');
