@@ -2,6 +2,9 @@ const imaps = require('imap-simple');
 const _ = require('lodash');
 const simpleParser = require('mailparser').simpleParser;
 const nodemailer = require('nodemailer');
+const ReceivedEmail = require('../models/ReceivedEmail');
+const { subMinutes } = require('date-fns');
+const { Op } = require('sequelize');
 
 function capitalizeFirstLetter(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
@@ -790,18 +793,42 @@ const parseAVEmailsFromCloud = async (message) => {
 	});
 
 	const dateString = `${dayString} às ${hourString}`;
-	console.log(`Local: ${local}`);
 
-	// console.log(local);
-	// console.log(destination);
-	// console.log(source);
-	// console.log(policy);
-	// console.log(dateString);
-	// console.log(description);
-	// console.log(authUser);
-	// console.log(virus);
-	// console.log(host);
-	// console.log(path);
+	try {
+		const now = new Date();
+
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: local,
+				destination_ip: destination,
+				source_ip: source,
+				type: 'AV',
+				createdAt: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: local,
+			destination_ip: destination,
+			source_ip: source,
+			type: 'AV',
+		});
+	} catch (err) {
+		console.log(err);
+	}
 
 	await virusCloudEmailSender(
 		local,
@@ -915,7 +942,41 @@ const parseIPSEmails = async (message) => {
 
 	const timeString = `${dayOfTheWeek} ${month} ${dateArray[2]} ${dateArray[3]} ${dateArray[4]}`;
 
-	console.log(`Appliance: ${appliance}`);
+	try {
+		const now = new Date();
+
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: appliance,
+				destination_ip: destination,
+				source_ip: source,
+				type: 'IPS',
+				createdAt: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: appliance,
+			destination_ip: destination,
+			source_ip: source,
+			type: 'IPS',
+		});
+	} catch (err) {
+		console.log(err);
+	}
 
 	await ipsEmailSender(
 		appliance,
@@ -946,9 +1007,6 @@ const parseIPSEmailsFromCloud = async (message) => {
 	const auxPolicy = message.split('Policy Name: ', 2);
 	const policy = auxPolicy[1].split(' ', 1)[0];
 
-	// const auxWhen = message.split('WHEN:\n\n', 2);
-	// const when = auxWhen[1].split('\n', 1)[0];
-
 	const dayString = capitalizeFirstLetter(
 		new Date().toLocaleString('pt-BR', {
 			dateStyle: 'long',
@@ -965,6 +1023,42 @@ const parseIPSEmailsFromCloud = async (message) => {
 	});
 
 	const dateString = `${dayString} às ${hourString}`;
+
+	try {
+		const now = new Date();
+
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: local,
+				destination_ip: destinationIp,
+				source_ip: sourceIp,
+				type: 'IPS',
+				createdAt: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: local,
+			destination_ip: destinationIp,
+			source_ip: sourceIp,
+			type: 'IPS',
+		});
+	} catch (err) {
+		console.log(err);
+	}
 
 	await ipsCloudEmailSender(
 		local,
@@ -976,16 +1070,6 @@ const parseIPSEmailsFromCloud = async (message) => {
 		destinationPort,
 		sourcePort,
 	);
-
-	// console.log(`Local: ${local}`);
-	// console.log(`Ip Destino: ${destinationIp}`);
-	// console.log(`Porta Destino: ${destinationPort}`);
-	// console.log(`Ip Origem: ${sourceIp}`);
-	// console.log(`Porta Origem: ${sourcePort}`);
-	// console.log(`RuleID: ${ruleId}`);
-	// console.log(`Política: ${policy}`);
-	// console.log(`Dia: ${dayString}`);
-	// console.log(`Hora: ${hourString}`);
 };
 
 const parsePORTSCAMEmailsFromCloud = async (message) => {
@@ -996,9 +1080,6 @@ const parsePORTSCAMEmailsFromCloud = async (message) => {
 	const auxSource = message.split('from ', 2);
 	const sourceIp = auxSource[1].split('detected', 1)[0];
 	const description = 'Port Scam Attack';
-
-	// const auxWhen = message.split('<h4>When:</h4>\n', 2);
-	// const when = auxWhen[1].split('\n', 1)[0];
 
 	const dayString = capitalizeFirstLetter(
 		new Date().toLocaleString('pt-BR', {
@@ -1017,14 +1098,43 @@ const parsePORTSCAMEmailsFromCloud = async (message) => {
 
 	const dateString = `${dayString} às ${hourString}`;
 
-	await portScamCloudEmailSender(local, destinationIp, sourceIp, dateString);
+	try {
+		const now = new Date();
 
-	// console.log(`Local: ${local}`);
-	// console.log(`Ip Destino: ${destinationIp}`);
-	// console.log(`Ip Origem: ${sourceIp}`);
-	// console.log(`Descrição: ${description}`);
-	// console.log(`Dia: ${dateString}`);
-	// console.log(`Hora: ${hourString}`);
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: local,
+				destination_ip: destinationIp,
+				source_ip: sourceIp,
+				type: 'PORTSCAM',
+				created_at: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: local,
+			destination_ip: destinationIp,
+			source_ip: sourceIp,
+			type: 'PORTSCAM',
+		});
+	} catch (err) {
+		console.log(err);
+	}
+
+	await portScamCloudEmailSender(local, destinationIp, sourceIp, dateString);
 };
 
 const parseAVEmails = async (message) => {
@@ -1127,17 +1237,41 @@ const parseAVEmails = async (message) => {
 
 	console.log(`Appliance: ${appliance}`);
 
-	// console.log(appliance);
-	// console.log(destination);
-	// console.log(source);
-	// console.log(policy);
-	// console.log(timeString);
-	// console.log(description);
-	// console.log(reason);
-	// console.log(authUser);
-	// console.log(virus);
-	// console.log(host);
-	// console.log(path);
+	try {
+		const now = new Date();
+
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: appliance,
+				destination_ip: destination,
+				source_ip: source,
+				type: 'AV',
+				createdAt: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: appliance,
+			destination_ip: destination,
+			source_ip: source,
+			type: 'AV',
+		});
+	} catch (err) {
+		console.log(err);
+	}
 
 	await aVEmailSender(
 		appliance,
