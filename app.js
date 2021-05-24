@@ -6,6 +6,8 @@ const error = require('./middleware/error');
 const routes = require('./routes');
 const { emailStalker } = require('./helpers/emailHelper');
 
+require('./database');
+
 const app = express();
 
 app.use(bodyParser.json({ limit: '25MB' }));
