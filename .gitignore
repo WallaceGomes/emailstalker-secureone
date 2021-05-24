@@ -12,6 +12,8 @@
 /build
 
 # misc
+/database/config
+
 # dotenv environment variables file
 .env
 .env.test
