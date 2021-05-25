@@ -799,7 +799,7 @@ const parseAVEmailsFromCloud = async (message) => {
 
 		const nowMinusSettedMinutes = subMinutes(
 			now,
-			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
 		);
 
 		const checkedEmail = await ReceivedEmail.findOne({
@@ -947,7 +947,7 @@ const parseIPSEmails = async (message) => {
 
 		const nowMinusSettedMinutes = subMinutes(
 			now,
-			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
 		);
 
 		const checkedEmail = await ReceivedEmail.findOne({
@@ -1029,7 +1029,7 @@ const parseIPSEmailsFromCloud = async (message) => {
 
 		const nowMinusSettedMinutes = subMinutes(
 			now,
-			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
 		);
 
 		const checkedEmail = await ReceivedEmail.findOne({
@@ -1242,7 +1242,7 @@ const parseAVEmails = async (message) => {
 
 		const nowMinusSettedMinutes = subMinutes(
 			now,
-			process.eventNames.MINUTES_TO_PREVENT_EMAILS,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
 		);
 
 		const checkedEmail = await ReceivedEmail.findOne({
