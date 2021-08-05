@@ -1840,7 +1840,8 @@ const emailStalker = async () => {
 
 									// Link Operadora
 
-									if (mailHtml.includes('SecureOne')) {
+									if (from.text === `${process.env.MAILER_EMAIL}`) {
+										return;
 									}
 
 									if (
