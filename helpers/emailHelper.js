@@ -1838,11 +1838,9 @@ const emailStalker = async () => {
 									const subject = mail.subject;
 									const from = mail.from;
 
-									// Link Operadora
-
 									if (from.text === `${process.env.MAILER_EMAIL}`) {
 										return;
-									}
+                  }
 
 									if (
 										mailHtml &&
