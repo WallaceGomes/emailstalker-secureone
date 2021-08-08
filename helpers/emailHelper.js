@@ -3,7 +3,7 @@ const _ = require('lodash');
 const simpleParser = require('mailparser').simpleParser;
 const nodemailer = require('nodemailer');
 const ReceivedEmail = require('../models/ReceivedEmail');
-const { subMinutes, subSeconds } = require('date-fns');
+const { subMinutes, subSeconds, subHours, subDays } = require('date-fns');
 const { Op } = require('sequelize');
 
 function capitalizeFirstLetter(string) {
@@ -37,7 +37,7 @@ const ipsEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança Intrusion Prevention!',
+			subject: '🔥 Alerta de segurança Intrusion Prevention!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
 				<span style="color:rgb(243,144,29)">Alerta de segurança!</span>
@@ -217,7 +217,7 @@ const aVEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança Gateway Antivírus!',
+			subject: '🔥 Alerta de segurança Gateway Antivírus!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
 				<span style="margin:0px; color:rgb(200,38,19)">Alerta de segurança!</span>
@@ -337,7 +337,7 @@ const ipsCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança Intrusion Prevention!',
+			subject: '🔥 Alerta de segurança Intrusion Prevention!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
 				<span style="color:rgb(243,144,29)">Alerta de segurança!</span>
@@ -511,7 +511,7 @@ const portScamCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança Port Scan!',
+			subject: '🔥 Alerta de segurança Port Scan!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
 				<span style="margin:0px; color:rgb(81,167,249)">Alerta de segurança!</span>
@@ -655,7 +655,7 @@ const virusCloudEmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança Gateway Antivírus!',
+			subject: '🔥 Alerta de segurança Gateway Antivírus!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="margin:0px 0cm 6px; background-color:rgb(255,255,255); font-size:13.5pt; font-family:Calibri,sans-serif">
 				<span style="margin:0px; color:rgb(200,38,19)">Alerta de segurança!</span>
@@ -778,7 +778,7 @@ const tDREmailSender = async (
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: 'Alerta de segurança TDR Comportamento!',
+			subject: '🔥 Alerta de segurança TDR Comportamento!',
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
 				<span style="color:rgb(59,32,77)">Alerta de segurança!</span>
@@ -983,7 +983,7 @@ const linkDownEmailSender = async (host, operadora, dateString) => {
 			</h4>
 			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
 				<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
-					<div><b>Host</b>: <span style="color:rgb(237,92,87)">${host}</span>
+					<div><b>Local</b>: <span style="color:rgb(237,92,87)">${host}</span>
 					</div>
 					<div><b>Operadora</b>: <span style="color:rgb(237,92,87)">${operadora}</span></div>
 					<div><b>Status</b>: <span style="color:rgb(237,92,87)">Offline</span></div> </div>
@@ -1061,7 +1061,7 @@ const linkUpEmailSender = async (
 			</h4>
 			<div style="margin:0px; background-color:rgb(255,255,255)"><span style="margin:0px; color:rgb(85,85,85)">
 				<div style="margin:0px 0cm; font-size:11pt; font-family:Calibri,sans-serif">
-					<div><b>Host</b>: <span style="color:rgb(111,192,64)">${host}</span>
+					<div><b>Local</b>: <span style="color:rgb(111,192,64)">${host}</span>
 					</div>
 					<div><b>Operadora</b>: <span style="color:rgb(111,192,64)">${operadora}</span></div>
 					<div><b>Status</b>: <span style="color:rgb(111,192,64)">Online</span></div> </div>
@@ -1730,17 +1730,72 @@ const parseLinkDownEmails = async (message) => {
 
 const parseLinkUpEmails = async (message) => {
 	const auxOperadora = message.split('Link Operadora ', 2);
-	const operadora = auxOperadora[1].split(' -', 1)[0];
+	const operadora = auxOperadora[1].split('-', 1)[0];
 
 	const auxHost = message.split('HOST ', 2);
 	const host = auxHost[1].split('<br/>', 1)[0];
 
 	const auxDuracao = message.split('Dura&ccedil;&atilde;o ', 2);
-	const duracao = auxDuracao[1].split(' Status', 1)[0];
+	const duracao = auxDuracao[1].split('<br/>Status', 1)[0];
 
-	const duracaoMinutos = duracao.split('m', 1)[0];
-	const auxDuracaoSegundos = duracao.split('m ', 2);
-	const duracaoSegundos = auxDuracaoSegundos[1].split('s')[0];
+	let duracaoDias = '0';
+	let duracaoHoras = '0';
+	let duracaoMinutos = '0';
+	let duracaoSegundos = '0';
+
+	if (duracao.includes('d')) {
+		const auxDuracaoDias = duracao.split('d', 1)[0];
+		duracaoDias = auxDuracaoDias;
+		// console.log(`Duracao dias: |${duracaoDias}|`);
+	}
+	if (duracao.includes('h')) {
+		const auxDuracaoHoras = duracao.split('h', 1)[0];
+		if (auxDuracaoHoras.includes('d')) {
+			duracaoHoras = auxDuracaoHoras.split(' ', 2)[1];
+		} else {
+			duracaoHoras = auxDuracaoHoras;
+		}
+		// console.log(`duracao horas: |${duracaoHoras}|`);
+	}
+	if (duracao.includes('m')) {
+		const auxDuracaoMinutos = duracao.split('m', 1)[0];
+		if (auxDuracaoMinutos.includes('h') && auxDuracaoMinutos.includes('d')) {
+			duracaoMinutos = auxDuracaoMinutos.split(' ', 3)[2];
+		} else if (
+			auxDuracaoMinutos.includes('h') &&
+			!auxDuracaoMinutos.includes('d')
+		) {
+			duracaoMinutos = auxDuracaoMinutos.split(' ', 2)[1];
+		} else {
+			duracaoMinutos = auxDuracaoMinutos;
+		}
+		// console.log(`Duracao minutos: |${duracaoMinutos}|`);
+	}
+	if (duracao.includes('s')) {
+		const auxDuracaoSegundos = duracao.split('s', 1)[0];
+		if (
+			auxDuracaoSegundos.includes('h') &&
+			auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			duracaoSegundos = auxDuracaoSegundos.split(' ', 4)[3];
+		} else if (
+			!auxDuracaoSegundos.includes('h') &&
+			auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			duracaoSegundos = auxDuracaoSegundos.split(' ', 3)[2];
+		} else if (
+			!auxDuracaoSegundos.includes('h') &&
+			!auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			duracaoSegundos = auxDuracaoSegundos.split(' ', 2)[1];
+		} else {
+			duracaoSegundos = auxDuracaoSegundos;
+		}
+		// console.log(`Duracao segundos: |${duracaoSegundos}|`);
+	}
 
 	const auxFinalDateHour = message.split('resolvido &agrave;s ', 2);
 	const finalDateHour = auxFinalDateHour[1].split(' em ', 1)[0];
@@ -1751,16 +1806,21 @@ const parseLinkUpEmails = async (message) => {
 
 	const finalDateArray = aux2FinalDateDay.split('.');
 
-	const auxInitialDate = subMinutes(
-		new Date(
-			finalDateArray[0],
-			finalDateArray[1] - 1,
-			finalDateArray[2],
-			finalDateHourArray[0],
-			finalDateHourArray[1],
-			finalDateHourArray[2],
+	let auxInitialDate = new Date(
+		finalDateArray[0],
+		finalDateArray[1] - 1,
+		finalDateArray[2],
+		finalDateHourArray[0],
+		finalDateHourArray[1],
+		finalDateHourArray[2],
+	);
+
+	auxInitialDate = subSeconds(
+		subMinutes(
+			subHours(subDays(auxInitialDate, duracaoDias), duracaoHoras),
+			duracaoMinutos,
 		),
-		duracaoMinutos,
+		auxInitialDate,
 	);
 
 	const initialDate = subSeconds(auxInitialDate, duracaoSegundos);
@@ -1776,20 +1836,10 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	).toLocaleString('pt-br');
 
-	// console.log(`Operadora: ${operadora}`);
 	// console.log(`Host: ${host}`);
-	// console.log(
-	// 	`Final Date Date: ${new Date(
-	// 		finalDateArray[0],
-	// 		finalDateArray[1] - 1,
-	// 		finalDateArray[2],
-	// 		finalDateHourArray[0],
-	// 		finalDateHourArray[1],
-	// 		finalDateHourArray[2],
-	// 	).toLocaleString('pt-br')}`,
-	// );
-
-	// console.log(initialDate.toLocaleString('pt-BR'));
+	// console.log(`operadora: ${operadora}`);
+	// console.log(`initialDateString: ${initialDateString}`);
+	// console.log(`finalDateString: ${finalDateString}`);
 
 	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
