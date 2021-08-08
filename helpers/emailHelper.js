@@ -987,7 +987,7 @@ const linkDownEmailSender = async (host, operadora, dateString) => {
 					</div>
 					<div><b>Operadora</b>: <span style="color:rgb(237,92,87)">${operadora}</span></div>
 					<div><b>Status</b>: <span style="color:rgb(237,92,87)">Offline</span></div> </div>
-					<div style="font-size:11pt;"><b>Hora e data de início</b>: Problema começou às <span style="color:rgb(237,92,87)">${dateString}</span></div>
+					<div style="font-size:11pt;"><b>Hora e data de início</b>: Problema começou em <span style="color:rgb(237,92,87)">${dateString}</span></div>
 					<div><br>
 					</div>
 					<div><br>
@@ -1065,8 +1065,8 @@ const linkUpEmailSender = async (
 					</div>
 					<div><b>Operadora</b>: <span style="color:rgb(111,192,64)">${operadora}</span></div>
 					<div><b>Status</b>: <span style="color:rgb(111,192,64)">Online</span></div> </div>
-					<div style="font-size:11pt;"><b>Hora e data de início</b>: Problema começou às <span style="color:rgb(237,92,87)">${initialDateString}</span></div>
-					<div style="font-size:11pt;"><b>Hora e data de término</b>: Problema resolvido às <span style="color:rgb(111,192,64)">${finalDateString}</span></div>
+					<div style="font-size:11pt;"><b>Hora e data de início</b>: Problema começou em <span style="color:rgb(237,92,87)">${initialDateString}</span></div>
+					<div style="font-size:11pt;"><b>Hora e data de término</b>: Problema resolvido em <span style="color:rgb(111,192,64)">${finalDateString}</span></div>
 					<div><br>
 					</div>
 					<div><br>
@@ -1815,15 +1815,13 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	);
 
-	auxInitialDate = subSeconds(
+	const initialDate = subSeconds(
 		subMinutes(
 			subHours(subDays(auxInitialDate, duracaoDias), duracaoHoras),
 			duracaoMinutos,
 		),
-		auxInitialDate,
+		duracaoSegundos,
 	);
-
-	const initialDate = subSeconds(auxInitialDate, duracaoSegundos);
 
 	const initialDateString = initialDate.toLocaleString('pt-BR');
 
