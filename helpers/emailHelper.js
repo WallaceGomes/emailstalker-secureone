@@ -1815,15 +1815,13 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	);
 
-	auxInitialDate = subSeconds(
+	const initialDate = subSeconds(
 		subMinutes(
 			subHours(subDays(auxInitialDate, duracaoDias), duracaoHoras),
 			duracaoMinutos,
 		),
-		auxInitialDate,
+		duracaoSegundos,
 	);
-
-	const initialDate = subSeconds(auxInitialDate, duracaoSegundos);
 
 	const initialDateString = initialDate.toLocaleString('pt-BR');
 
