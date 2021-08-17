@@ -1838,10 +1838,10 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	).toLocaleString('pt-br');
 
-	console.log(`Host: ${host}`);
-	console.log(`operadora: ${operadora}`);
-	console.log(`initialDateString: ${initialDateString}`);
-	console.log(`finalDateString: ${finalDateString}`);
+	// console.log(`Host: ${host}`);
+	// console.log(`operadora: ${operadora}`);
+	// console.log(`initialDateString: ${initialDateString}`);
+	// console.log(`finalDateString: ${finalDateString}`);
 
 	// await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
