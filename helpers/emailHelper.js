@@ -1843,7 +1843,7 @@ const parseLinkUpEmails = async (message) => {
 	// console.log(`initialDateString: ${initialDateString}`);
 	// console.log(`finalDateString: ${finalDateString}`);
 
-	// await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
+	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
 
 const emailStalker = async () => {
