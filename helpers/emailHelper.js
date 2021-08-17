@@ -1780,17 +1780,21 @@ const parseLinkUpEmails = async (message) => {
 		) {
 			duracaoSegundos = auxDuracaoSegundos.split(' ', 4)[3];
 		} else if (
-			!auxDuracaoSegundos.includes('h') &&
-			auxDuracaoSegundos.includes('d') &&
+			!auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('h') &&
 			auxDuracaoSegundos.includes('m')
 		) {
 			duracaoSegundos = auxDuracaoSegundos.split(' ', 3)[2];
 		} else if (
-			!auxDuracaoSegundos.includes('h') &&
 			!auxDuracaoSegundos.includes('d') &&
+			!auxDuracaoSegundos.includes('h') &&
 			auxDuracaoSegundos.includes('m')
 		) {
-			duracaoSegundos = auxDuracaoSegundos.split(' ', 2)[1];
+			if (auxDuracaoSegundos.includes('<br/>')) {
+				duracaoSegundos = auxDuracaoSegundos.split('<br/>', 2)[1];
+			} else {
+				duracaoSegundos = auxDuracaoSegundos.split(' ', 2)[1];
+			}
 		} else {
 			duracaoSegundos = auxDuracaoSegundos;
 		}
