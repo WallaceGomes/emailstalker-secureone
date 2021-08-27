@@ -1749,16 +1749,18 @@ const parseLinkUpEmails = async (message) => {
 		// console.log(`Duracao dias: |${duracaoDias}|`);
 	}
 	if (duracao.includes('h')) {
-		const auxDuracaoHoras = duracao.split('h', 1)[0];
+		const auxFormatHoras = duracao.split('h', 1)[0];
+		const auxDuracaoHoras = auxFormatHoras.replace(/<br.*?>/g, ' ');
 		if (auxDuracaoHoras.includes('d')) {
 			duracaoHoras = auxDuracaoHoras.split(' ', 2)[1];
 		} else {
 			duracaoHoras = auxDuracaoHoras;
 		}
-		// console.log(`duracao horas: |${duracaoHoras}|`);
+		// console.log(`Duracao horas: |${duracaoHoras}|`);
 	}
 	if (duracao.includes('m')) {
-		const auxDuracaoMinutos = duracao.split('m', 1)[0];
+		const auxFormatMinutos = duracao.split('m', 1)[0];
+		const auxDuracaoMinutos = auxFormatMinutos.replace(/<br.*?>/g, ' ');
 		if (auxDuracaoMinutos.includes('h') && auxDuracaoMinutos.includes('d')) {
 			duracaoMinutos = auxDuracaoMinutos.split(' ', 3)[2];
 		} else if (
@@ -1772,7 +1774,8 @@ const parseLinkUpEmails = async (message) => {
 		// console.log(`Duracao minutos: |${duracaoMinutos}|`);
 	}
 	if (duracao.includes('s')) {
-		const auxDuracaoSegundos = duracao.split('s', 1)[0];
+		const auxFormatSegundos = duracao.split('s', 1)[0];
+		const auxDuracaoSegundos = auxFormatSegundos.replace(/<br.*?>/g, ' ');
 		if (
 			auxDuracaoSegundos.includes('h') &&
 			auxDuracaoSegundos.includes('d') &&
@@ -1784,7 +1787,11 @@ const parseLinkUpEmails = async (message) => {
 			auxDuracaoSegundos.includes('h') &&
 			auxDuracaoSegundos.includes('m')
 		) {
-			duracaoSegundos = auxDuracaoSegundos.split(' ', 3)[2];
+			if (auxDuracaoSegundos.includes('<br/>')) {
+				duracaoSegundos = auxDuracaoSegundos.split('<br/>', 3)[2];
+			} else {
+				duracaoSegundos = auxDuracaoSegundos.split(' ', 3)[2];
+			}
 		} else if (
 			!auxDuracaoSegundos.includes('d') &&
 			!auxDuracaoSegundos.includes('h') &&
