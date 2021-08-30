@@ -1496,6 +1496,76 @@ const parsePORTSCAMEmailsFromCloud = async (message) => {
 	await portScamCloudEmailSender(local, destinationIp, sourceIp, dateString);
 };
 
+const parsePORTSCAMEmails = async (message) => {
+	const auxLocal = message.split('Appliance: ', 2);
+	const local = auxLocal[1].split('\n', 1)[0];
+	const auxDestination = message.split('against ', 2);
+	const destinationIp = auxDestination[1].split('from', 1)[0];
+	const auxSource = message.split('from ', 2);
+	const sourceIp = auxSource[1].split('detected', 1)[0];
+	const description = 'Port Scam Attack';
+
+	const dayString = capitalizeFirstLetter(
+		new Date().toLocaleString('pt-BR', {
+			dateStyle: 'long',
+			weekday: 'long',
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric',
+		}),
+	);
+
+	const hourString = new Date().toLocaleString('pt-BR', {
+		timeStyle: 'short',
+		hour12: false,
+	});
+
+	const dateString = `${dayString} às ${hourString}`;
+
+	try {
+		const now = new Date();
+
+		const nowMinusSettedMinutes = subMinutes(
+			now,
+			process.env.MINUTES_TO_PREVENT_EMAILS,
+		);
+
+		const checkedEmail = await ReceivedEmail.findOne({
+			where: {
+				appliance: local,
+				destination_ip: destinationIp,
+				source_ip: sourceIp,
+				type: 'PORTSCAM',
+				created_at: {
+					[Op.between]: [nowMinusSettedMinutes, now],
+				},
+			},
+			logging: false,
+		});
+
+		if (checkedEmail) {
+			console.log('Prevented email copy of being delivered...');
+			return;
+		}
+
+		await ReceivedEmail.create({
+			appliance: local,
+			destination_ip: destinationIp,
+			source_ip: sourceIp,
+			type: 'PORTSCAM',
+		});
+	} catch (err) {
+		console.log(err);
+	}
+
+	// console.log(local);
+	// console.log(destinationIp);
+	// console.log(sourceIp);
+	// console.log(dateString);
+
+	await portScamCloudEmailSender(local, destinationIp, sourceIp, dateString);
+};
+
 const parseAVEmails = async (message) => {
 	const auxAppliance = message.split('Appliance: ', 2);
 	const appliance = auxAppliance[1].split('\n', 1)[0];
@@ -1964,6 +2034,10 @@ const emailStalker = async () => {
 										if (mailText.includes('-av')) {
 											console.log('AV EMAIL');
 											await parseAVEmails(mailText);
+										}
+										if (mailText.includes('port_scan_dos')) {
+											console.log('PORT SCAM ALERT');
+											await parsePORTSCAMEmails(mailText);
 										}
 									}
 								});
