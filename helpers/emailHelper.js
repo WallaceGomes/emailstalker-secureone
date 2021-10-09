@@ -761,6 +761,8 @@ const tDREmailSender = async (
 	file,
 	indicatorLink,
 	notificationLink,
+	remediationLink,
+	processo,
 ) => {
 	const transport = nodemailer.createTransport({
 		host: 'smtp.office365.com',
@@ -772,16 +774,23 @@ const tDREmailSender = async (
 			pass: process.env.MAILER_PASS,
 		},
 	});
-	//
 
 	transport
 		.sendMail({
 			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
-			subject: '🔥 Alerta de segurança TDR Comportamento!',
+			subject: `${
+				action.includes('Kill Process')
+					? `⚠️ Alerta de segurança TDR Comportamento! "Ransomware suspected"`
+					: '🔥 Alerta de segurança TDR Comportamento!'
+			}`,
 			html: `<body style="max-width: 1080px; margin-top: 20px; margin-left: 10px; font-family: 'Calibri', sans-serif;">
 			<h3 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:13.5pt; margin-right:0cm; margin-left:0cm">
-				<span style="color:rgb(59,32,77)">Alerta de segurança!</span>
+				<span style="color:rgb(59,32,77)">${
+					action.includes('Kill Process')
+						? `Alerta de segurança! "Ransomware suspected"`
+						: 'Alerta de segurança! '
+				}</span>
 			</h3>
 			<h4 style="color:rgb(0,0,0); font-family:Calibri,sans-serif; font-size:12pt; margin-right:0cm; margin-left:0cm">
 				<span style="color:#555555">Informação:&nbsp;</span>
@@ -861,27 +870,70 @@ const tDREmailSender = async (
 							style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
 					</b>
 				</p>
-				<p
-					style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
-					<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
-							style="background-color:rgb(255,255,255)"></b><b style="background-color:rgb(255,255,255)"><b
-								style="background-color:rgb(255,255,255)">Arquivo:<span style="margin:0px">&nbsp;</span></b><span
-								style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">${file}</span></b><span
-							style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
-					</b>
-				</p>
+				${
+					file
+						? `
+						<p
+						style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+						<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+								style="background-color:rgb(255,255,255)"></b><b style="background-color:rgb(255,255,255)"><b
+									style="background-color:rgb(255,255,255)">Arquivo:<span style="margin:0px">&nbsp;</span></b><span
+									style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">${file}</span></b><span
+								style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
+						</b>
+					</p>
+					`
+						: `<span></span>`
+				}
+				${
+					processo
+						? `
+						<p
+							style="margin-top: 0px; margin-bottom: 0px;margin-top:0px; margin-bottom:0px; color:rgb(85,85,85); font-family:Calibri,sans-serif; font-size:11pt; margin-right:0cm; margin-left:0cm">
+							<b style="font-size:11pt; font-variant-ligatures:inherit; font-variant-caps:inherit"><b
+									style="background-color:rgb(255,255,255)"></b><b style="background-color:rgb(255,255,255)"><b
+										style="background-color:rgb(255,255,255)">Processo:<span style="margin:0px">&nbsp;</span></b><span
+										style="margin:0px; font-weight:400; background-color:rgb(255,255,255); display:inline!important">${processo}</span></b><span
+									style="font-weight:400; background-color:rgb(255,255,255); display:inline!important"></span><br>
+							</b>
+						</p>
+					`
+						: `<span></span>`
+				}
 				<br>
 			</div>
-			<div style=""><span style="font-family:Calibri,Helvetica,sans-serif">Indicador link:</span>
-				<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
-							href="${indicatorLink}"
-							id="LPlnk677473">${indicatorLink}</a></span><br>
+			${
+				indicatorLink
+					? `
+				<div style=""><span style="font-family:Calibri,Helvetica,sans-serif">Indicador link:</span>
+					<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
+								href="${indicatorLink}"
+								id="LPlnk677473">${indicatorLink}</a></span><br>
+					</div>
+					<div><br>
+					</div>
+					<div><br>
+					</div>
 				</div>
-				<div><br>
+				`
+					: `<span><span/>`
+			}
+			${
+				remediationLink
+					? `
+				<div style=""><span style="font-family:Calibri,Helvetica,sans-serif">Remediation link:</span>
+					<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
+								href="${remediationLink}"
+								id="LPlnk677473">${remediationLink}</a></span><br>
+					</div>
+					<div><br>
+					</div>
+					<div><br>
+					</div>
 				</div>
-				<div><br>
-				</div>
-			</div>
+				`
+					: `<span><span/>`
+			}
 			<div style=""><span style="font-family:Calibri,Helvetica,sans-serif">Notificação link:</span>
 				<div><span style="font-family:Calibri,Helvetica,sans-serif"><a
 							href="${notificationLink}"
@@ -1736,22 +1788,58 @@ const parseTDREmails = async (message) => {
 	const auxId = message.split('Id: ', 2);
 	const id = auxId[1].split('\n', 1)[0];
 
-	const auxFailureReason = message.split('Failure Reason: ', 2);
-	const failureReason = auxFailureReason[1].split('\n', 1)[0];
+	let failureReason = 'Protection';
+	let file;
+	let processo;
+	let remediationLink;
+	let indicatorLink;
+
+	if (message.includes('Failure Reason: ')) {
+		const auxFailureReason = message.split('Failure Reason: ', 2);
+		failureReason = auxFailureReason[1].split('\n', 1)[0];
+	}
 
 	const auxPath = message.split('Path: ', 2);
 	const path = auxPath[1].split('\n', 1)[0];
 
-	const auxFile = message.split('File: ', 2);
-	const file = auxFile[1].split('\n', 1)[0];
+	if (message.includes('File: ')) {
+		const auxFile = message.split('File: ', 2);
+		file = auxFile[1].split('\n', 1)[0];
+	}
 
-	const auxIndicatorLink = message.split('Indicator link: ', 2);
-	const indicatorLink = auxIndicatorLink[1].split('\n', 1)[0];
+	if (message.includes('Process: ')) {
+		const auxProcess = message.split('Process: ', 2);
+		processo = auxProcess[1].split('\n', 1)[0];
+	}
+
+	if (message.includes('Indicator link: ')) {
+		const auxIndicatorLink = message.split('Indicator link: ', 2);
+		indicatorLink = auxIndicatorLink[1].split('\n', 1)[0];
+	}
+
+	if (message.includes('Remediation link: ')) {
+		const auxRemediationLink = message.split('Remediation link: ', 2);
+		remediationLink = auxRemediationLink[1].split('\n', 1)[0];
+	}
 
 	const auxNotificationLink = message.split('Notification link: ', 2);
 	const notificationLink = auxNotificationLink[1].split('\n', 1)[0];
 
-	tDREmailSender(
+	// console.log(local);
+	// console.log(host);
+	// console.log(score);
+	// console.log(action);
+	// console.log(dateTime);
+	// console.log(id);
+	// console.log(file);
+	// console.log(failureReason);
+	// console.log(remediationLink);
+	// console.log(indicatorLink);
+	// console.log(processo);
+	// console.log(path);
+	// console.log(notificationLink);
+
+	await tDREmailSender(
 		local,
 		host,
 		score,
@@ -1763,6 +1851,8 @@ const parseTDREmails = async (message) => {
 		file,
 		indicatorLink,
 		notificationLink,
+		remediationLink,
+		processo,
 	);
 };
 
@@ -1796,6 +1886,38 @@ const parseLinkDownEmails = async (message) => {
 	// console.log(`Initial Date: ${initialDateString}`);
 
 	await linkDownEmailSender(host, operadora, initialDateString);
+};
+
+const parseLinkInternetDownEmails = async (message) => {
+	const auxLink = message.split('Link Internet IP:', 2);
+	const link = auxLink[1].split(' -', 1)[0];
+
+	const auxHost = message.split('HOST ', 2);
+	const host = auxHost[1].split('<br/>', 1)[0];
+
+	const auxInitialDateHour = message.split(';ou &agrave;s ', 2);
+	const initialDateHour = auxInitialDateHour[1].split(' em ', 1)[0];
+
+	const aux1InitalDateDay = message.split(' em ', 2);
+	const aux2InitialDateDay = aux1InitalDateDay[1].split(' HOST', 1)[0];
+
+	const dateDayArray = aux2InitialDateDay.split('.');
+	const hourArray = initialDateHour.split(':');
+
+	const initialDateString = new Date(
+		dateDayArray[0],
+		dateDayArray[1] - 1,
+		dateDayArray[2],
+		hourArray[0],
+		hourArray[1],
+		hourArray[2],
+	).toLocaleString('pt-BR');
+
+	console.log(`Link: ${link}`);
+	console.log(`Host: ${host}`);
+	console.log(`Initial Date: ${initialDateString}`);
+
+	// await linkDownEmailSender(host, link, initialDateString);
 };
 
 const parseLinkUpEmails = async (message) => {
@@ -1923,6 +2045,131 @@ const parseLinkUpEmails = async (message) => {
 	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
 
+const parseLinkInternetUpEmails = async (message) => {
+	const auxOperadora = message.split('Link Internet ', 2);
+	const operadora = auxOperadora[1].split('-', 1)[0];
+
+	const auxHost = message.split('HOST ', 2);
+	const host = auxHost[1].split('<br/>', 1)[0];
+
+	const auxDuracao = message.split('Dura&ccedil;&atilde;o ', 2);
+	const duracao = auxDuracao[1].split('<br/>Status', 1)[0];
+
+	let duracaoDias = '0';
+	let duracaoHoras = '0';
+	let duracaoMinutos = '0';
+	let duracaoSegundos = '0';
+
+	if (duracao.includes('d')) {
+		const auxDuracaoDias = duracao.split('d', 1)[0];
+		duracaoDias = auxDuracaoDias;
+		// console.log(`Duracao dias: |${duracaoDias}|`);
+	}
+	if (duracao.includes('h')) {
+		const auxFormatHoras = duracao.split('h', 1)[0];
+		const auxDuracaoHoras = auxFormatHoras.replace(/<br.*?>/g, ' ');
+		if (auxDuracaoHoras.includes('d')) {
+			duracaoHoras = auxDuracaoHoras.split(' ', 2)[1];
+		} else {
+			duracaoHoras = auxDuracaoHoras;
+		}
+		// console.log(`Duracao horas: |${duracaoHoras}|`);
+	}
+	if (duracao.includes('m')) {
+		const auxFormatMinutos = duracao.split('m', 1)[0];
+		const auxDuracaoMinutos = auxFormatMinutos.replace(/<br.*?>/g, ' ');
+		if (auxDuracaoMinutos.includes('h') && auxDuracaoMinutos.includes('d')) {
+			duracaoMinutos = auxDuracaoMinutos.split(' ', 3)[2];
+		} else if (
+			auxDuracaoMinutos.includes('h') &&
+			!auxDuracaoMinutos.includes('d')
+		) {
+			duracaoMinutos = auxDuracaoMinutos.split(' ', 2)[1];
+		} else {
+			duracaoMinutos = auxDuracaoMinutos;
+		}
+		// console.log(`Duracao minutos: |${duracaoMinutos}|`);
+	}
+	if (duracao.includes('s')) {
+		const auxFormatSegundos = duracao.split('s', 1)[0];
+		const auxDuracaoSegundos = auxFormatSegundos.replace(/<br.*?>/g, ' ');
+		if (
+			auxDuracaoSegundos.includes('h') &&
+			auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			duracaoSegundos = auxDuracaoSegundos.split(' ', 4)[3];
+		} else if (
+			!auxDuracaoSegundos.includes('d') &&
+			auxDuracaoSegundos.includes('h') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			if (auxDuracaoSegundos.includes('<br/>')) {
+				duracaoSegundos = auxDuracaoSegundos.split('<br/>', 3)[2];
+			} else {
+				duracaoSegundos = auxDuracaoSegundos.split(' ', 3)[2];
+			}
+		} else if (
+			!auxDuracaoSegundos.includes('d') &&
+			!auxDuracaoSegundos.includes('h') &&
+			auxDuracaoSegundos.includes('m')
+		) {
+			if (auxDuracaoSegundos.includes('<br/>')) {
+				duracaoSegundos = auxDuracaoSegundos.split('<br/>', 2)[1];
+			} else {
+				duracaoSegundos = auxDuracaoSegundos.split(' ', 2)[1];
+			}
+		} else {
+			duracaoSegundos = auxDuracaoSegundos;
+		}
+		// console.log(`Duracao segundos: |${duracaoSegundos}|`);
+	}
+
+	const auxFinalDateHour = message.split('resolvido &agrave;s ', 2);
+	const finalDateHour = auxFinalDateHour[1].split(' em ', 1)[0];
+	const finalDateHourArray = finalDateHour.split(':');
+
+	const aux2InitalDateDay = message.split(' em ', 2);
+	const aux2FinalDateDay = aux2InitalDateDay[1].split(' HOST', 1)[0];
+
+	const finalDateArray = aux2FinalDateDay.split('.');
+
+	let auxInitialDate = new Date(
+		finalDateArray[0],
+		finalDateArray[1] - 1,
+		finalDateArray[2],
+		finalDateHourArray[0],
+		finalDateHourArray[1],
+		finalDateHourArray[2],
+	);
+
+	const initialDate = subSeconds(
+		subMinutes(
+			subHours(subDays(auxInitialDate, duracaoDias), duracaoHoras),
+			duracaoMinutos,
+		),
+		duracaoSegundos,
+	);
+
+	const initialDateString = initialDate.toLocaleString('pt-BR');
+
+	const finalDateString = new Date(
+		finalDateArray[0],
+		finalDateArray[1] - 1,
+		finalDateArray[2],
+		finalDateHourArray[0],
+		finalDateHourArray[1],
+		finalDateHourArray[2],
+	).toLocaleString('pt-br');
+
+	console.log(`Host: ${host}`);
+	console.log(`operadora: ${operadora}`);
+	console.log(`initialDateString: ${initialDateString}`);
+	console.log(`finalDateString: ${finalDateString}`);
+
+	// await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
+};
+
 const emailStalker = async () => {
 	console.log('Stalker Running...');
 
@@ -1966,6 +2213,17 @@ const emailStalker = async () => {
 									const mailHtmlAsText = mail.textAsHtml;
 									const subject = mail.subject;
 									const from = mail.from;
+
+									// if (
+									// 	mailHtml &&
+									// 	mailHtml.includes('Problema começou') &&
+									// 	mailHtml.includes('Link Internet')
+									// ) {
+									// 	parseLinkInternetDownEmails(mailHtmlAsText);
+									// 	return;
+									// }
+
+									// return;
 
 									if (
 										mailHtml &&
