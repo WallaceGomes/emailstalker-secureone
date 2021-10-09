@@ -777,7 +777,7 @@ const tDREmailSender = async (
 
 	transport
 		.sendMail({
-			from: 'no-reply@secureone.com.br',
+			from: process.env.MAILER_EMAIL,
 			to: `${process.env.MAILER_EMAIL}`,
 			subject: `${
 				action.includes('Kill Process')
