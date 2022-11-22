@@ -2027,94 +2027,98 @@ const emailStalker = async () => {
 		return;
 	}
 
-	for await (const email of unreadEmails) {
-		const { id, subject, body, from } = email;
+	try {
+		for await (const email of unreadEmails) {
+			const { id, subject, body, from } = email;
 
-		const mailHtml = body.content;
-		const fromAddress = from.emailAddress.address;
+			const mailHtml = body.content;
+			const fromAddress = from.emailAddress.address;
 
-		if (fromAddress === process.env.MAILER_EMAIL) {
-			console.log('Email from me, skipping...');
+			if (fromAddress === process.env.MAILER_EMAIL) {
+				console.log('Email from me, skipping...');
+				await markSeenEmail(id);
+				continue;
+			}
+
+			console.log(`Processing email: ${id}`);
+
+			if (
+				mailHtml.includes('Problema começou') &&
+				mailHtml.includes('Link Internet')
+			) {
+				console.log('Email de linkDown');
+				await parseLinkDownEmails(mailHtml);
+			}
+
+			if (
+				mailHtml.includes('Problema resolvido') &&
+				mailHtml.includes('Link Operadora')
+			) {
+				console.log('Email de linkUp');
+				await parseLinkUpEmails(mailHtml);
+			}
+
+			if (mailHtml && mailHtml.includes('Indicator Details')) {
+				await parseTDREmails(mailHtml);
+				await markSeenEmail(id);
+				return;
+			}
+
+			if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
+				console.log('DDOS ALERT IGNORED');
+				await markSeenEmail(id);
+				return;
+			}
+			if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
+				console.log('DDOS ALERT IGNORED');
+				await markSeenEmail(id);
+				return;
+			}
+			if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
+				console.log('DDOS ALERT IGNORED');
+				await markSeenEmail(id);
+				return;
+			}
+
+			if (fromAddress === `${process.env.CLOUD_EMAIL}`) {
+				console.log('Analizing email from cloud...');
+				if (mailHtml.includes('port_scan_dos')) {
+					console.log('PORT SCAM ALERT');
+					await parsePORTSCAMEmailsFromCloud(mailHtml);
+				}
+
+				if (mailHtml.includes('IPS match') && mailHtml.includes('Rule')) {
+					console.log('IPS MATCH ALERT');
+					await parseIPSEmailsFromCloud(mailHtml);
+				}
+
+				if (mailHtml.includes('-av')) {
+					console.log('ANTI VIRUS ALERT');
+					await parseAVEmailsFromCloud(mailHtml);
+				}
+			} else {
+				console.log('Analizing email from local...');
+				if (mailHtml.includes('IPS')) {
+					console.log('IPS EMAIL');
+					await parseIPSEmails(mailHtml);
+				}
+
+				if (mailHtml.includes('-av')) {
+					console.log('AV EMAIL');
+					await parseAVEmails(mailHtml);
+				}
+
+				if (mailHtml.includes('port_scan_dos')) {
+					console.log('PORT SCAM ALERT');
+					await parsePORTSCAMEmails(mailHtml);
+				}
+			}
+
+			// mark email as read
 			await markSeenEmail(id);
-			continue;
 		}
-
-		console.log(`Processing email: ${id}`);
-
-		if (
-			mailHtml.includes('Problema começou') &&
-			mailHtml.includes('Link Internet')
-		) {
-			console.log('Email de linkDown');
-			await parseLinkDownEmails(mailHtml);
-		}
-
-		if (
-			mailHtml.includes('Problema resolvido') &&
-			mailHtml.includes('Link Operadora')
-		) {
-			console.log('Email de linkUp');
-			await parseLinkUpEmails(mailHtml);
-		}
-
-		if (mailHtml && mailHtml.includes('Indicator Details')) {
-			await parseTDREmails(mailHtml);
-			await markSeenEmail(id);
-			return;
-		}
-
-		if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
-			console.log('DDOS ALERT IGNORED');
-			await markSeenEmail(id);
-			return;
-		}
-		if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
-			console.log('DDOS ALERT IGNORED');
-			await markSeenEmail(id);
-			return;
-		}
-		if (mailHtml && mailHtml.includes('ddos_attack_src_dos')) {
-			console.log('DDOS ALERT IGNORED');
-			await markSeenEmail(id);
-			return;
-		}
-
-		if (fromAddress === `${process.env.CLOUD_EMAIL}`) {
-			console.log('Analizing email from cloud...');
-			if (mailHtml.includes('port_scan_dos')) {
-				console.log('PORT SCAM ALERT');
-				await parsePORTSCAMEmailsFromCloud(mailHtml);
-			}
-
-			if (mailHtml.includes('IPS match') && mailHtml.includes('Rule')) {
-				console.log('IPS MATCH ALERT');
-				await parseIPSEmailsFromCloud(mailHtml);
-			}
-
-			if (mailHtml.includes('-av')) {
-				console.log('ANTI VIRUS ALERT');
-				await parseAVEmailsFromCloud(mailHtml);
-			}
-		} else {
-			console.log('Analizing email from local...');
-			if (mailHtml.includes('IPS')) {
-				console.log('IPS EMAIL');
-				await parseIPSEmails(mailHtml);
-			}
-
-			if (mailHtml.includes('-av')) {
-				console.log('AV EMAIL');
-				await parseAVEmails(mailHtml);
-			}
-
-			if (mailHtml.includes('port_scan_dos')) {
-				console.log('PORT SCAM ALERT');
-				await parsePORTSCAMEmails(mailHtml);
-			}
-		}
-
-		// mark email as read
-		await markSeenEmail(id);
+	} catch (error) {
+		console.log(error);
 	}
 
 	console.log('Done!');
