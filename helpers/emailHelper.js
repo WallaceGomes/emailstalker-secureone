@@ -66,8 +66,7 @@ const sendEmail = async (subject, content) => {
 			toRecipients: [
 				{
 					emailAddress: {
-						// address: process.env.MAILER_EMAIL,
-						address: 'wallacecardosogomes@gmail.com',
+						address: process.env.MAILER_EMAIL,
 					},
 				},
 			],
@@ -1741,7 +1740,7 @@ const parseLinkDownEmails = async (message) => {
 	console.log(`Host: ${host}`);
 	console.log(`Initial Date: ${initialDateString}`);
 
-	// await linkDownEmailSender(host, operadora, initialDateString);
+	await linkDownEmailSender(host, operadora, initialDateString);
 };
 
 const parseLinkInternetDownEmails = async (message) => {
@@ -1931,7 +1930,7 @@ const parseLinkUpEmails = async (message) => {
 	console.log(`initialDateString: ${initialDateString}`);
 	console.log(`finalDateString: ${finalDateString}`);
 
-	// await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
+	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
 
 const parseLinkInternetUpEmails = async (message) => {
