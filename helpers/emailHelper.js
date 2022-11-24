@@ -66,7 +66,8 @@ const sendEmail = async (subject, content) => {
 			toRecipients: [
 				{
 					emailAddress: {
-						address: process.env.MAILER_EMAIL,
+						// address: process.env.MAILER_EMAIL,
+						address: 'wallacecardosogomes@gmail.com',
 					},
 				},
 			],
@@ -1682,8 +1683,32 @@ const parseTDREmails = async (message) => {
 };
 
 const parseLinkDownEmails = async (message) => {
-	const auxOperadora = message.split('Link Operadora ', 2);
-	const operadora = auxOperadora[1].split(' -', 1)[0];
+	let operadora = 'N/A';
+
+	if (message.includes('Indisponível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split('- Indisponível', 1)[0];
+	}
+
+	if (message.includes('Interface Down')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Interface Down', 1)[0];
+	}
+
+	if (message.includes('Coleta de SNMP Indisponível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Coleta de SNMP Indisponível', 1)[0];
+	}
+
+	if (message.includes('Link External 0')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Link External 0', 1)[0];
+	}
+
+	if (message.includes('Equipamento inacessível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split('- Equipamento inacessível', 1)[0];
+	}
 
 	const auxHost = message.split('HOST', 2);
 	const hostTrim = auxHost[1].split('Problema', 1)[0];
@@ -1716,7 +1741,7 @@ const parseLinkDownEmails = async (message) => {
 	console.log(`Host: ${host}`);
 	console.log(`Initial Date: ${initialDateString}`);
 
-	await linkDownEmailSender(host, operadora, initialDateString);
+	// await linkDownEmailSender(host, operadora, initialDateString);
 };
 
 const parseLinkInternetDownEmails = async (message) => {
@@ -1752,8 +1777,32 @@ const parseLinkInternetDownEmails = async (message) => {
 };
 
 const parseLinkUpEmails = async (message) => {
-	const auxOperadora = message.split('Link Operadora ', 2);
-	const operadora = auxOperadora[1].split('-', 1)[0];
+	let operadora = 'N/A';
+
+	if (message.includes('Equipamento Indisponível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Indisponível', 1)[0];
+	}
+
+	if (message.includes('Interface Down')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Interface Down', 1)[0];
+	}
+
+	if (message.includes('Coleta de SNMP Indisponível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Coleta de SNMP Indisponível', 1)[0];
+	}
+
+	if (message.includes('Link External 0')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Link External 0', 1)[0];
+	}
+
+	if (message.includes('Equipamento inacessível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Equipamento inacessível', 1)[0];
+	}
 
 	const auxHost = message.split('HOST', 2);
 	const hostTrim = auxHost[1].split('Problema', 1)[0];
@@ -1877,12 +1926,12 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	).toLocaleString('pt-br');
 
-	// console.log(`Host: ${host}`);
-	// console.log(`operadora: ${operadora}`);
-	// console.log(`initialDateString: ${initialDateString}`);
-	// console.log(`finalDateString: ${finalDateString}`);
+	console.log(`Host: ${host}`);
+	console.log(`operadora: ${operadora}`);
+	console.log(`initialDateString: ${initialDateString}`);
+	console.log(`finalDateString: ${finalDateString}`);
 
-	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
+	// await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
 
 const parseLinkInternetUpEmails = async (message) => {
@@ -2042,18 +2091,12 @@ const emailStalker = async () => {
 
 			console.log(`Processing email: ${id}`);
 
-			if (
-				mailHtml.includes('Problema começou') &&
-				mailHtml.includes('Link Internet')
-			) {
+			if (mailHtml.includes('Problema começou')) {
 				console.log('Email de linkDown');
 				await parseLinkDownEmails(mailHtml);
 			}
 
-			if (
-				mailHtml.includes('Problema resolvido') &&
-				mailHtml.includes('Link Operadora')
-			) {
+			if (mailHtml.includes('Problema resolvido')) {
 				console.log('Email de linkUp');
 				await parseLinkUpEmails(mailHtml);
 			}
