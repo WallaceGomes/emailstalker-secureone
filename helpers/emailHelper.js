@@ -1778,6 +1778,11 @@ const parseLinkInternetDownEmails = async (message) => {
 const parseLinkUpEmails = async (message) => {
 	let operadora = 'N/A';
 
+	if (message.includes('- Indisponível')) {
+		const auxOperadora = message.split('Problema</th><td>', 2);
+		operadora = auxOperadora[1].split(' - Indisponível', 1)[0];
+	}
+
 	if (message.includes('Equipamento Indisponível')) {
 		const auxOperadora = message.split('Problema</th><td>', 2);
 		operadora = auxOperadora[1].split(' - Indisponível', 1)[0];
@@ -1925,10 +1930,10 @@ const parseLinkUpEmails = async (message) => {
 		finalDateHourArray[2],
 	).toLocaleString('pt-br');
 
-	console.log(`Host: ${host}`);
-	console.log(`operadora: ${operadora}`);
-	console.log(`initialDateString: ${initialDateString}`);
-	console.log(`finalDateString: ${finalDateString}`);
+	// console.log(`Host: ${host}`);
+	// console.log(`operadora: ${operadora}`);
+	// console.log(`initialDateString: ${initialDateString}`);
+	// console.log(`finalDateString: ${finalDateString}`);
 
 	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
