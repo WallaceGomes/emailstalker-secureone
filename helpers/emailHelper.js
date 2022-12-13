@@ -2090,6 +2090,12 @@ const emailStalker = async () => {
 
 			console.log(`Processing email: ${id}`);
 
+			if (mailHtml.includes('SNMP')) {
+				console.log('SNMP EMAIL IGNORED');
+				await markSeenEmail(id);
+				return;
+			}
+
 			if (mailHtml.includes('Problema começou')) {
 				console.log('Email de linkDown');
 				await parseLinkDownEmails(mailHtml);
