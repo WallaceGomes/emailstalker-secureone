@@ -1024,8 +1024,12 @@ const parseAVEmailsFromCloud = async (message) => {
 	const auxPolicy = message.split('Policy Name: ', 2);
 	const policy = auxPolicy[1].split(' ', 1)[0];
 
-	const auxAuthUser = message.split('User: ', 2);
-	const authUser = auxAuthUser[1].split(' ', 1)[0];
+	let authUser = 'Não identificado';
+
+	if (message.includes('User: ')) {
+		const auxAuthUser = message.split('User: ', 2);
+		authUser = auxAuthUser[1].split(' ', 1)[0];
+	}
 
 	const auxVirus = message.split('virus: ', 2);
 	const virus = auxVirus[1].split(' ', 1)[0];
@@ -1042,10 +1046,6 @@ const parseAVEmailsFromCloud = async (message) => {
 	const dayString = capitalizeFirstLetter(
 		new Date().toLocaleString('pt-BR', {
 			dateStyle: 'long',
-			weekday: 'long',
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
 		}),
 	);
 
