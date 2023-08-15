@@ -1736,9 +1736,9 @@ const parseLinkDownEmails = async (message) => {
 		hourArray[2],
 	).toLocaleString('pt-BR');
 
-	console.log(`Operadora: ${operadora}`);
-	console.log(`Host: ${host}`);
-	console.log(`Initial Date: ${initialDateString}`);
+	// console.log(`Operadora: ${operadora}`);
+	// console.log(`Host: ${host}`);
+	// console.log(`Initial Date: ${initialDateString}`);
 
 	await linkDownEmailSender(host, operadora, initialDateString);
 };
@@ -1938,6 +1938,78 @@ const parseLinkUpEmails = async (message) => {
 	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
 };
 
+const parseSelfLinkUpEmails = async (message) => {
+	let operadora = 'N/A';
+
+	if (message.includes('Problem name:')) {
+		const auxOperadora = message.split('Problem name:</b>', 2);
+		operadora = auxOperadora[1].split('<br>', 1)[0];
+	}
+
+	const auxHost = message.split('Host:', 2);
+	const hostTrim = auxHost[1].split('<br>', 1)[0];
+	const host = hostTrim.replace('</b>', '').replace('<b>', '');
+
+	// get this date -> <b>Problem has been resolved</b> at 15:29:04 on 2023.08.10<br>
+	// and transform into this date -> 15/08/2023, 08:32:05
+
+	const auxFinalDateHour = message.split(
+		'Problem has been resolved</b> at ',
+		2,
+	);
+	const finalDateHour = auxFinalDateHour[1].split(' on', 1)[0];
+
+	const auxFinalDate = message.split(' on ', 2);
+	const auxFinalDateWithDots = auxFinalDate[1].split('<br>', 1)[0];
+	const finalDateArray = auxFinalDateWithDots.split('.');
+
+	const finalDateString = `${finalDateArray[2]}/${finalDateArray[1]}/${finalDateArray[0]}, ${finalDateHour}`;
+
+	const auxInitialDateHour = message.split('Problem started</b> at ', 2);
+	const initialDateHour = auxInitialDateHour[1].split(' on', 1)[0];
+
+	const auxInitialDate = message.split(' on ', 2);
+	const auxInitialDateWithDots = auxInitialDate[1].split('<br>', 1)[0];
+	const initialDateArray = auxInitialDateWithDots.split('.');
+
+	const initialDateString = `${initialDateArray[2]}/${initialDateArray[1]}/${initialDateArray[0]}, ${initialDateHour}`;
+
+	// console.log(`Host: ${host}`);
+	// console.log(`operadora: ${operadora}`);
+	// console.log(`initialDateString: ${initialDateString}`);
+	// console.log(`finalDateString: ${finalDateString}`);
+
+	await linkUpEmailSender(host, operadora, initialDateString, finalDateString);
+};
+
+const parseSelfLinkDownEmails = async (message) => {
+	let operadora = 'N/A';
+
+	if (message.includes('Problem name:')) {
+		const auxOperadora = message.split('Problem name:</b>', 2);
+		operadora = auxOperadora[1].split('<br>', 1)[0];
+	}
+
+	const auxHost = message.split('Host:', 2);
+	const hostTrim = auxHost[1].split('<br>', 1)[0];
+	const host = hostTrim.replace('</b>', '').replace('<b>', '');
+
+	const auxInitialDateHour = message.split('Problem started</b> at ', 2);
+	const initialDateHour = auxInitialDateHour[1].split(' on', 1)[0];
+
+	const auxInitialDate = message.split(' on ', 2);
+	const auxInitialDateWithDots = auxInitialDate[1].split('<br>', 1)[0];
+	const initialDateArray = auxInitialDateWithDots.split('.');
+
+	const initialDateString = `${initialDateArray[2]}/${initialDateArray[1]}/${initialDateArray[0]}, ${initialDateHour}`;
+
+	console.log(`Host: ${host}`);
+	console.log(`operadora: ${operadora}`);
+	console.log(`initialDateString: ${initialDateString}`);
+
+	await linkDownEmailSender(host, operadora, initialDateString);
+};
+
 const parseLinkInternetUpEmails = async (message) => {
 	const auxOperadora = message.split('Link Internet ', 2);
 	const operadora = auxOperadora[1].split('-', 1)[0];
@@ -2087,13 +2159,26 @@ const emailStalker = async () => {
 			const mailHtml = body.content;
 			const fromAddress = from.emailAddress.address;
 
+			console.log(`Processing email: ${id}`);
+
 			if (fromAddress === process.env.MAILER_EMAIL) {
 				console.log('Email from me, skipping...');
-				await markSeenEmail(id);
-				continue;
-			}
 
-			console.log(`Processing email: ${id}`);
+				if (mailHtml.includes('<b>Link</b> : UP<br>')) {
+					console.log('Link UP email');
+					await parseSelfLinkUpEmails(mailHtml);
+					await markSeenEmail(id);
+					continue;
+				} else if (mailHtml.includes('<b>Link</b> : Down<br>')) {
+					console.log('Link Down email');
+					await parseSelfLinkDownEmails(mailHtml);
+					await markSeenEmail(id);
+					continue;
+				} else {
+					await markSeenEmail(id);
+					continue;
+				}
+			}
 
 			if (mailHtml.includes('SNMP')) {
 				console.log('SNMP EMAIL IGNORED');
