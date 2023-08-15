@@ -2003,9 +2003,9 @@ const parseSelfLinkDownEmails = async (message) => {
 
 	const initialDateString = `${initialDateArray[2]}/${initialDateArray[1]}/${initialDateArray[0]}, ${initialDateHour}`;
 
-	console.log(`Host: ${host}`);
-	console.log(`operadora: ${operadora}`);
-	console.log(`initialDateString: ${initialDateString}`);
+	// console.log(`Host: ${host}`);
+	// console.log(`operadora: ${operadora}`);
+	// console.log(`initialDateString: ${initialDateString}`);
 
 	await linkDownEmailSender(host, operadora, initialDateString);
 };
